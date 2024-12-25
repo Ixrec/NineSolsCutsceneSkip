@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace ExampleMod;
+namespace CutsceneSkip;
 
 [HarmonyPatch]
 public class Patches {

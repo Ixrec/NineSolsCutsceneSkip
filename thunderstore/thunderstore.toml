@@ -2,11 +2,11 @@
 schemaVersion = "0.0.1"
 
 [package]
-namespace = "yournamespace"
-name = "YourModName"
+namespace = "Ixrec"
+name = "CutsceneSkip"
 versionNumber = "0.1.0"
-description = "your mod description"
-websiteUrl = "link to the git repo"
+description = "A Nine Sols mod that enables skipping any cutscene or dialogue (that won't break the game)."
+websiteUrl = "https://github.com/Ixrec/NineSolsCutsceneSkip"
 containsNsfwContent = false
 
 [package.dependencies]
