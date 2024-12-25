@@ -34,6 +34,10 @@
         <Reference Include="InControl">
             <HintPath>$(NineSolsPath)/NineSols_Data/Managed/InControl.dll</HintPath>
         </Reference>
+		<!-- references that weren't in the ExampleMod template -->
+		<Reference Include="XNode">
+			<HintPath>$(NineSolsPath)/NineSols_Data/Managed/XNode.dll</HintPath>
+		</Reference>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
+using Dialogue;
 using HarmonyLib;
 using NineSolsAPI;
 using UnityEngine;
@@ -10,8 +11,7 @@ namespace CutsceneSkip;
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class CutsceneSkip : BaseUnityPlugin {
     // https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/4_configuration.html
-    private ConfigEntry<bool> enableSomethingConfig = null!;
-    private ConfigEntry<KeyboardShortcut> somethingKeyboardShortcut = null!;
+    private ConfigEntry<KeyboardShortcut> skipKeybind = null!;
 
     private Harmony harmony = null!;
 
@@ -22,37 +22,40 @@ public class CutsceneSkip : BaseUnityPlugin {
         // Load patches from any class annotated with @HarmonyPatch
         harmony = Harmony.CreateAndPatchAll(typeof(CutsceneSkip).Assembly);
 
-        enableSomethingConfig = Config.Bind("General.Something", "Enable", true, "Enable the thing");
-        somethingKeyboardShortcut = Config.Bind("General.Something", "Shortcut",
-            new KeyboardShortcut(KeyCode.H, KeyCode.LeftControl), "Shortcut to execute");
+        skipKeybind = Config.Bind("General.SkipKeybind", "SkipKeybind",
+            new KeyboardShortcut(KeyCode.K, KeyCode.LeftControl), "Skip Keybind");
 
-        // Usage of the modding API is entirely optional.
-        // It provides utilities like the KeybindManager, utilities for Instantiating objects including the 
-        // NineSols lifecycle hooks, displaying toast messages and preloading objects from other scenes.
-        // If you do use the API make sure do have it installed when running your mod, and keep the dependency in the
-        // thunderstore.toml.
-
-        KeybindManager.Add(this, TestMethod, () => somethingKeyboardShortcut.Value);
+        KeybindManager.Add(this, SkipActiveCutsceneOrDialogue, () => skipKeybind.Value);
 
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
     }
 
-    // Some fields are private and need to be accessed via reflection.
-    // You can do this with `typeof(Player).GetField("_hasHat", BindingFlags.Instance|BindingFlags.NonPublic).GetValue(Player.i)`
-    // or using harmony access tools:
-    private static readonly AccessTools.FieldRef<Player, bool>
-        PlayerHasHat = AccessTools.FieldRefAccess<Player, bool>("_hasHat");
+    public static SimpleCutsceneManager? activeCutscene = null;
 
-    private void TestMethod() {
-        if (!enableSomethingConfig.Value) return;
-        ToastManager.Toast("Shortcut activated");
-        Log.Info("Log messages will only show up in the logging console and LogOutput.txt");
+    private void SkipActiveCutsceneOrDialogue() {
+        if (activeCutscene != null) {
+            Log.Debug($"calling TrySkip() on {activeCutscene.name}");
+            AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
+            activeCutscene = null;
 
-        // Sometimes variables aren't set in the title screen. Make sure to check for null to prevent crashes.
-        if (Player.i == null) return;
+            ToastManager.Toast($"Cutscene Skipped");
+            return;
+        }
+        Log.Debug($"activeCutscene was null. Checking for dialogue next.");
 
-        var hasHat = PlayerHasHat.Invoke(Player.i);
-        Player.i.SetHasHat(!hasHat);
+        var dpgo = GameObject.Find("GameCore(Clone)/RCG LifeCycle/UIManager/GameplayUICamera/Always Canvas/DialoguePlayer(KeepThisEnable)");
+        var dp = dpgo?.GetComponent<DialoguePlayer>();
+        if (dp != null) {
+            var playingDialogueGraph = AccessTools.FieldRefAccess<DialoguePlayer, DialogueGraph>("playingDialogueGraph").Invoke(dp);
+            if (playingDialogueGraph != null) {
+                dp.TrySkip();
+                ToastManager.Toast($"Dialogue Skipped");
+                return;
+            }
+            Log.Debug($"no dialogue was playing");
+        } else {
+            Log.Debug($"dp was null");
+        }
     }
 
     private void OnDestroy() {
