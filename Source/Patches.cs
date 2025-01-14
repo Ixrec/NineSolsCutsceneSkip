@@ -53,6 +53,12 @@ public class Patches {
         ToastManager.Toast($"Press Ctrl+K to Skip This Dialogue");
     }
 
+    [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
+    private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
+        Log.Info($"A2_SG4_Logic_EnterLevelStart {__instance.name}");
+        ToastManager.Toast($"Press Ctrl+K to Skip This Heng Flashback");
+    }
+
     // Exploratory patches. These can all be commented out.
     /*
     [HarmonyPatch(typeof(SkippableManager), nameof(SkippableManager.RegisterSkippable))]

@@ -33,6 +33,13 @@ public class CutsceneSkip : BaseUnityPlugin {
     public static SimpleCutsceneManager? activeCutscene = null;
 
     private void SkipActiveCutsceneOrDialogue() {
+        var hengPRFlashback = GameObject.Find("A2_SG4/Logic")?.GetComponent<A2_SG4_Logic>();
+        if (hengPRFlashback != null) {
+            Log.Info($"Found A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, calling A2_SG4_Logic.TrySkip() as a special case");
+            hengPRFlashback.TrySkip();
+            return;
+        }
+
         if (activeCutscene != null) {
             Log.Debug($"calling TrySkip() on {activeCutscene.name}");
             AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
