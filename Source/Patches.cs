@@ -19,8 +19,14 @@ public class Patches {
     }
 
     private static List<string> skipDenylist = new List<string> {
-        // skipping these "cutscenes" leaves enemies in unintended, possibly softlocking places, such as stuck inside walls
+        // skipping this leaves enemies in unintended, possibly softlocking places, such as stuck inside walls
         "A1_S2_GameLevel/Room/Prefab/Gameplay2_Alina/Simple Binding Tool/SimpleCutSceneFSM_關門戰開頭演出/FSM Animator/LogicRoot/[CutScene]",
+        // skipping this softlocks immediately
+        "A2_S1/Room/Prefab/EnterPyramid_Acting/[CutScene]ActivePyramidAndEnter",
+        // skipping this leaves the camera stuck, not technically a softlock but still unplayable
+        "A1_S1_GameLevel/Room/A1_S1_Tutorial_Logic/[CutScene]AfterTutorial_AI_Call/[Timeline]",
+        // skipping this prevents enemy from dropping item, i.e. breaks a randomizer location
+        "A2_S5_ BossHorseman_GameLevel/Room/Simple Binding Tool/Boss_SpearHorse_Logic/[CutScene]SpearHorse_End"
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
