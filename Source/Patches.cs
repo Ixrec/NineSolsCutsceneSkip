@@ -33,6 +33,13 @@ public class Patches {
      *      impl appears to be TrySkip()ing all ISkippables, so for "cutscenes" that's the same as what I'm doing
      * 
      * - skipping the sanctum entry scene leaves Yi's movement speed un-slowed inside, despite the slow walk animation getting used
+     * 
+     * - A3_S1 / LYR Heng flashback is only partially skippable, even with the softlock exclusion,
+     * we should be able to at least make the manga segment skippable too
+     * "A3_S1/Room/Prefab/妹妹回憶_SimpleCutSceneFSM Variant" is the FSM GO
+     * seems like manga segments are part of SimpleCutsceneManager, there's no other TrySkip() method to attempt here
+     *      after beating Goumang, the manga cutscene claims to be skippable, and almost works, but you have to press A after Ctrl+K (???)
+     *      actually no this softlocks you unable to finish the Goumang interaction
      */
 
     private static List<string> skipDenylist = new List<string> {
@@ -219,14 +226,6 @@ public class Patches {
         Log.Info($"!!! Boss_SpearHorse_Logic_Demo_Start {__instance.name} !!!");
     }
 
-    // ISkippables
-    // Yanlao???
-    [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
-    private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
-        Log.Info($"!!! A4_S5_Logic_EnterLevelStart {__instance.name} !!!");
-        ToastManager.Toast($"!!! A4_S5_Logic_EnterLevelStart");
-    }
-
     // IResetters
     [HarmonyPrefix, HarmonyPatch(typeof(A1_S1_Tutorial_Logic), "EnterLevelReset")]
     private static void A1_S1_Tutorial_Logic_EnterLevelReset(A1_S1_Tutorial_Logic __instance) {
@@ -236,6 +235,7 @@ public class Patches {
     private static void A1_S1_Tutorial_Logic_ExitLevelAndDestroy(A1_S1_Tutorial_Logic __instance) {
         Log.Info($"!!! A1_S1_Tutorial_Logic_ExitLevelAndDestroy {__instance.name} !!!");
     }
+    // this is in the Outer Warehouse
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S1_PistonRow_Logic), "EnterLevelReset")]
     private static void A4_S1_PistonRow_Logic_EnterLevelReset(A4_S1_PistonRow_Logic __instance) {
         Log.Info($"!!! A4_S1_PistonRow_Logic_EnterLevelReset {__instance.name} !!!");
