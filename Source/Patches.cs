@@ -34,6 +34,10 @@ public class Patches {
         // skipping this prevents a boss from dropping an item, i.e. breaks a randomizer location
         "A2_S5_ BossHorseman_GameLevel/Room/Simple Binding Tool/Boss_SpearHorse_Logic/[CutScene]SpearHorse_End",
         "A0_S6/Room/Prefab/SimpleCutSceneFSM_道長死亡/FSM Animator/LogicRoot/Cutscene_TaoChangPart2",
+        // covered by the special case logic for Yanlao/Claw fight
+        "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START",
+        "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSENE_EMERGENCY",
+        "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_Finish",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
@@ -70,10 +74,23 @@ public class Patches {
         ToastManager.Toast($"Press Ctrl+K to Skip This Dialogue");
     }
 
+    // Special cases
+
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
     private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
         Log.Info($"A2_SG4_Logic_EnterLevelStart {__instance.name}");
         ToastManager.Toast($"Press Ctrl+K to Skip This Heng Flashback");
+    }
+
+    [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
+    private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
+        Log.Info($"A4_S5_Logic_EnterLevelStart {__instance.name}");
+        ToastManager.Toast($"Press Ctrl+K to Skip Pre-Claw Fight Cutscenes");
+    }
+    [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "FooGameComplete")]
+    private static void A4_S5_Logic_FooGameComplete(A4_S5_Logic __instance) {
+        Log.Info($"A4_S5_Logic_FooGameComplete {__instance.name}");
+        ToastManager.Toast($"Press Ctrl+K to Skip Post-Claw Fight Cutscene");
     }
 
     // Exploratory patches. These can all be commented out.

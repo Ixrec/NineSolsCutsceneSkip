@@ -40,6 +40,27 @@ public class CutsceneSkip : BaseUnityPlugin {
             return;
         }
 
+        var yl = GameObject.Find("A4_S5/A4_S5_Logic(DisableMeForBossDesign)")?.GetComponent<A4_S5_Logic>();
+        if (yl != null) {
+            if (yl.BossKilled.CurrentValue) {
+                Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw already killed. Applying special case logic to skip post-fight scene.");
+                yl.FinishCutscene.TrySkip();
+            } else {
+                if (yl.GianMechClawMonsterBase.gameObject.activeSelf) {
+                    Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw not yet killed. But claw is already active, so trying to skip this now would just softlock. Doing nothing.");
+                    return;
+                }
+                Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw not yet killed. Applying special case logic to skip pre-fight scenes.");
+                var ylmc = GameObject.Find("A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START/MangaView_OriginalPrefab/MANGACanvas");
+                ylmc.SetActive(false);
+
+                yl.BeforeMangaBubble.TrySkip();
+                yl.BubbleDialogue.TrySkip();
+                yl.TrySkip();
+            }
+            return;
+        }
+
         var dpgo = GameObject.Find("GameCore(Clone)/RCG LifeCycle/UIManager/GameplayUICamera/Always Canvas/DialoguePlayer(KeepThisEnable)");
         var dp = dpgo?.GetComponent<DialoguePlayer>();
         if (dp != null) {
