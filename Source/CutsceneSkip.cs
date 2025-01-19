@@ -40,16 +40,6 @@ public class CutsceneSkip : BaseUnityPlugin {
             return;
         }
 
-        if (activeCutscene != null) {
-            Log.Debug($"calling TrySkip() on {activeCutscene.name}");
-            AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
-            activeCutscene = null;
-
-            ToastManager.Toast($"Cutscene Skipped");
-            return;
-        }
-        Log.Debug($"activeCutscene was null. Checking for dialogue next.");
-
         var dpgo = GameObject.Find("GameCore(Clone)/RCG LifeCycle/UIManager/GameplayUICamera/Always Canvas/DialoguePlayer(KeepThisEnable)");
         var dp = dpgo?.GetComponent<DialoguePlayer>();
         if (dp != null) {
@@ -63,6 +53,16 @@ public class CutsceneSkip : BaseUnityPlugin {
         } else {
             Log.Debug($"dp was null");
         }
+
+        if (activeCutscene != null) {
+            Log.Info($"calling TrySkip() on {activeCutscene.name}");
+            AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
+            activeCutscene = null;
+
+            ToastManager.Toast($"Cutscene Skipped");
+            return;
+        }
+        Log.Debug($"activeCutscene was null. Checking for dialogue next.");
     }
 
     private void OnDestroy() {
