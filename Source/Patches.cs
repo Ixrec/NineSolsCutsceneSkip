@@ -19,18 +19,16 @@ public class Patches {
     }
 
     /* TODO:
+     * - yuki's Cheat Menu already has LCtrl to skip stuff, see https://github.com/asd9176506911298/NineSolsPlugin/blob/e15b3d4797d5b89785553be03c7480341889eb5e/Plugin.cs#L1543-L1560
+     *      impl appears to be TrySkip()ing all ISkippables, so for "cutscenes" that's the same as what I'm doing
      * - https://github.com/asd9176506911298/NineSolsPlugin/blob/e15b3d4797d5b89785553be03c7480341889eb5e/Plugin.cs#L1543-L1560
      * is the "skip all skippables" code in Cheat Menu, link this when explaining how this mod is different
+     * - the sequence where Yi reactivates FSP may also be broken by this, but that could've been debug mod teleports
      * 
      * - entering AFD triggers A1_S3_GameLevel/Room/Prefab/CrateEntering_Logic/[TimeLine]CrateEnter_R despite Yi not actually entering a crate???
      * 
      * - A2_SG4 / PR Heng mostly works, but skipping it during the "call" start can lead to the call open sound looping forever
      * leads to a softlock when another call tries to start
-     * 
-     * - the sequence where Yi reactivates FSP may also be broken by this, but that could've been debug mod teleports
-     * 
-     * - yuki's Cheat Menu already has LCtrl to skip stuff, see https://github.com/asd9176506911298/NineSolsPlugin/blob/e15b3d4797d5b89785553be03c7480341889eb5e/Plugin.cs#L1543-L1560
-     *      impl appears to be TrySkip()ing all ISkippables, so for "cutscenes" that's the same as what I'm doing
      * 
      * - skipping the sanctum entry scene leaves Yi's movement speed un-slowed inside, despite the slow walk animation getting used
      * 
@@ -40,6 +38,14 @@ public class Patches {
      * seems like manga segments are part of SimpleCutsceneManager, there's no other TrySkip() method to attempt here
      *      after beating Goumang, the manga cutscene claims to be skippable, and almost works, but you have to press A after Ctrl+K (???)
      *      actually no this softlocks you unable to finish the Goumang interaction
+     * - dubi suggests: simpleCutsceneManager.playableDirector.playableGraph.GetRootPlayable(0).SetDone(true);
+     * 
+     * - Jiequan death manga
+     * A5_S5/Room/EventBinder/General Boss Fight FSM Object_結權/FSM Animator/[CutScene]Dying/[Timeline]Dying
+     * is skippable, but requires pressing A after skip to make it really stick???
+     * 
+     * - we do want code for VideoPlayAction after all. Lady E post-fight includes a video of Yi's first Fusang resurrection, which Tab does not skip:
+     * A7_S6_Memory_Butterfly_CutScene_GameLevel/A7_S6_Cutscene FSM/--[States]/FSM/[State] PlayingVideo/[Action] VideoPlayAction
      */
 
     private static List<string> skipDenylist = new List<string> {
@@ -82,7 +88,7 @@ public class Patches {
         } else if (__instance.name.EndsWith("_EnterScene")) {
             Log.Info($"skipping toast for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
         } else {
-            ToastManager.Toast($"Press Ctrl+K to Skip This Cutscene");
+            ToastManager.Toast($"Press Ctrl+K to Skip This Cutscene {__instance.name}");
         }
 
         CutsceneSkip.activeCutscene = __instance;
