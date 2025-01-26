@@ -78,6 +78,10 @@ public class CutsceneSkip : BaseUnityPlugin {
         if (activeCutscene != null) {
             Log.Info($"calling TrySkip() on {activeCutscene.name}");
             AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
+            if (AccessTools.FieldRefAccess<SimpleCutsceneManager, bool>("isMangaPauseing").Invoke(activeCutscene)) {
+                Log.Info($"also calling Resume() since it was 'manga paused'");
+                AccessTools.Method(typeof(SimpleCutsceneManager), "Resume").Invoke(activeCutscene, []);
+            }
             activeCutscene = null;
 
             ToastManager.Toast($"Cutscene Skipped");
