@@ -27,8 +27,10 @@ public class Patches {
         "A4_S4/ZGunAndDoor/Shield Giant Bot Control Provider Variant_Cutscene/Hack Control Monster FSM/FSM Animator/LogicRoot/Cutscene/LogicRoot/[CutScene]",
         "A5_S5/Room/SimpleCutSceneFSM_JieChuan and Jee/FSM Animator/LogicRoot/[CutScene]",
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
+        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 易公死亡", // = Eigong death, skipping leaves you trapped in her arena
         // skipping this leaves Yi stuck somewhere he can't get out of
         "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into BR
+        "A11_S2/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into TRI
         "AG_GoHome/Room/Prefab/SimpleCutSceneFSM_搭公車/FSM Animator/LogicRoot/[CutScene]", // normal ending tram
         // skipping this leaves the camera stuck, not technically a softlock but still unplayable
         "A1_S1_GameLevel/Room/A1_S1_Tutorial_Logic/[CutScene]AfterTutorial_AI_Call/[Timeline]",
@@ -41,6 +43,8 @@ public class Patches {
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START",
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSENE_EMERGENCY",
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_Finish",
+        // skips the post-PonR hallway, including all of the actual fighting, which is out of scope for this mod
+        "A11_S2/Room/Prefab/EventBinder/OldBoy FSM Object/FSM Animator/LogicRoot/[CutScene]OldBoyFighting/[Timeline]",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
@@ -54,6 +58,9 @@ public class Patches {
 
         if (__instance.name.EndsWith("[TimeLine]CrateEnter_L") || __instance.name.EndsWith("[TimeLine]CrateEnter_R")) {
             Log.Info($"not allowing skip for {goPath} because all crate exit 'cutscenes' I've tested instantly softlock when skipped");
+            return;
+        } else if (__instance.name == "[CutScene]調閱報告") {
+            Log.Info($"not allowing skip for {goPath} because all \"[CutScene]調閱報告\" / Eigong lab report cutscenes risk softlocking when skipped");
             return;
         } else if (__instance.name.EndsWith("_EnterScene")) {
             Log.Info($"skipping toast for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
