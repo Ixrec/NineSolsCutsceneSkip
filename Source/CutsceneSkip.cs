@@ -31,6 +31,7 @@ public class CutsceneSkip : BaseUnityPlugin {
     }
 
     public static SimpleCutsceneManager? activeCutscene = null;
+    public static VideoPlayAction? activeVideo = null;
 
     private void SkipActiveCutsceneOrDialogue() {
         var hengPRFlashback = GameObject.Find("A2_SG4/Logic")?.GetComponent<A2_SG4_Logic>();
@@ -87,7 +88,15 @@ public class CutsceneSkip : BaseUnityPlugin {
             ToastManager.Toast($"Cutscene Skipped");
             return;
         }
-        Log.Debug($"activeCutscene was null. Checking for dialogue next.");
+
+        if (activeVideo != null) {
+            Log.Info($"calling TrySkip() on {activeVideo.name}");
+            AccessTools.Method(typeof(VideoPlayAction), "TrySkip").Invoke(activeVideo, []);
+            activeVideo = null;
+
+            ToastManager.Toast($"Video Skipped");
+            return;
+        }
     }
 
     private void OnDestroy() {

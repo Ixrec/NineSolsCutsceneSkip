@@ -86,6 +86,28 @@ public class Patches {
         ToastManager.Toast($"Press Ctrl+K to Skip This Dialogue");
     }
 
+    private static HashSet<string> skippableVideos = new HashSet<string> {
+        "GameLevel/Room/Prefab/SimpleCutSceneFSM_結局_大爆炸/--[States]/FSM/[State] PlayCutSceneEnd/[Action] VideoPlayAction",
+    };
+
+    [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "OnStateEnterImplement")]
+    private static void VideoPlayAction_OnStateEnterImplement(VideoPlayAction __instance) {
+        var goPath = GetFullPath(__instance.gameObject);
+        Log.Info($"VideoPlayAction_OnStateEnterImplement {goPath}");
+        // TODO: use the allowlist once we're done testing
+        //if (skippableVideos.Contains(goPath)) {
+            CutsceneSkip.activeVideo = __instance;
+            ToastManager.Toast($"Press Ctrl+K to Skip This Video");
+        //}
+    }
+
+    [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "VideoClipDone")]
+    private static void VideoPlayAction_VideoClipDone(VideoPlayAction __instance) {
+        Log.Debug($"VideoPlayAction_VideoClipDone {__instance.name}");
+        if (CutsceneSkip.activeVideo == __instance)
+            CutsceneSkip.activeVideo = null;
+    }
+
     // Special cases
 
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
