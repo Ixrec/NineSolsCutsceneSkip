@@ -82,7 +82,7 @@ public class Patches {
 
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
     private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance) {
-        Log.Info($"DialoguePlayer_StartDialogue {__instance.name}");
+        Log.Debug($"DialoguePlayer_StartDialogue {__instance.name}");
         ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
     }
 
@@ -104,7 +104,6 @@ public class Patches {
             ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Video");
         }
     }
-
     [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "VideoClipDone")]
     private static void VideoPlayAction_VideoClipDone(VideoPlayAction __instance) {
         Log.Debug($"VideoPlayAction_VideoClipDone {__instance.name}");
@@ -112,129 +111,22 @@ public class Patches {
             CutsceneSkip.activeVideo = null;
     }
 
-    // Special cases
-
+    // The Heng flashback in Power Reservoir got its own special implementation class instead of using SimpleCutsceneManager
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
     private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
-        Log.Info($"A2_SG4_Logic_EnterLevelStart {__instance.name}");
+        Log.Info($"A2_SG4_Logic_EnterLevelStart / Heng Power Reservoir flashback");
         ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
     }
 
+    // The Yanlao fight also has a special implementation class not covered by our SimpleCutsceneManager patches
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
     private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
-        Log.Info($"A4_S5_Logic_EnterLevelStart {__instance.name}");
+        Log.Info($"A4_S5_Logic_EnterLevelStart / Sky Rending Claw Pre-Fight Scenes");
         ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Pre-Claw Fight Cutscenes");
     }
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "FooGameComplete")]
     private static void A4_S5_Logic_FooGameComplete(A4_S5_Logic __instance) {
-        Log.Info($"A4_S5_Logic_FooGameComplete {__instance.name}");
+        Log.Info($"A4_S5_Logic_FooGameComplete / Sky Rending Claw Post-Fight Scenes");
         ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Post-Claw Fight Cutscene");
     }
-
-    // Exploratory patches. These can all be commented out.
-    /*
-    [HarmonyPatch(typeof(SkippableManager), nameof(SkippableManager.RegisterSkippable))]
-    [HarmonyPrefix]
-    private static void SkippableManager_RegisterSkippable(SkippableManager __instance, ISkippable skippable) {
-        Log.Info($"SkippableManager_RegisterSkippable is MonoBehaviour = {(skippable is MonoBehaviour)}");
-        Log.Info($"SkippableManager_RegisterSkippable {(skippable as MonoBehaviour)?.name} - {skippable.GetType()} - {(skippable as MonoBehaviour)?.transform?.parent?.name}");
-    }
-    [HarmonyPatch(typeof(SkippableManager), nameof(SkippableManager.UnRegisterSkippable))]
-    [HarmonyPrefix]
-    private static void SkippableManager_UnRegisterSkippable(SkippableManager __instance, ISkippable skippable) {
-        Log.Info($"SkippableManager_UnRegisterSkippable is MonoBehaviour = {(skippable is MonoBehaviour)}");
-        Log.Info($"SkippableManager_UnRegisterSkippable {(skippable as MonoBehaviour)?.name} - {skippable.GetType()} - {(skippable as MonoBehaviour)?.transform?.parent?.name}");
-    }
-    [HarmonyPatch(typeof(SkippableManager), nameof(SkippableManager.ClearReference))]
-    [HarmonyPrefix]
-    private static void SkippableManager_ClearReference(SkippableManager __instance) {
-        Log.Info($"SkippableManager_ClearReference");
-    }
-    [HarmonyPatch(typeof(SkippableManager), nameof(SkippableManager.TrySkip))]
-    [HarmonyPrefix]
-    private static void SkippableManager_TrySkip(SkippableManager __instance) {
-        Log.Info($"SkippableManager_TrySkip");
-    }
-
-    [HarmonyPatch(typeof(SimpleCutsceneManager), nameof(SimpleCutsceneManager.Play), [])]
-    [HarmonyPrefix]
-    private static void SimpleCutsceneManager_Play(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_Play 0-ary {__instance.name}");
-    }
-    [HarmonyPatch(typeof(SimpleCutsceneManager), nameof(SimpleCutsceneManager.Play), [typeof(Action)])]
-    [HarmonyPrefix]
-    private static void SimpleCutsceneManager_Play(SimpleCutsceneManager __instance, Action callback) {
-        Log.Info($"SimpleCutsceneManager_Play 1-ary {__instance.name}");
-    }
-    [HarmonyPatch(typeof(SimpleCutsceneManager), nameof(SimpleCutsceneManager.Pause))]
-    [HarmonyPrefix]
-    private static void SimpleCutsceneManager_Pause(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_Pause {__instance.name}");
-    }
-    [HarmonyPatch(typeof(SimpleCutsceneManager), nameof(SimpleCutsceneManager.Resume))]
-    [HarmonyPrefix]
-    private static void SimpleCutsceneManager_Resume(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_Resume {__instance.name}");
-    }
-    [HarmonyPatch(typeof(SimpleCutsceneManager), "SetPauseLoop")]
-    [HarmonyPrefix]
-    private static void SimpleCutsceneManager_SetPauseLoop(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_SetPauseLoop {__instance.name}");
-    }
-    //[HarmonyPatch(typeof(SimpleCutsceneManager), "EnterLevelAwake")]
-    //[HarmonyPrefix]
-    //private static void SimpleCutsceneManager_EnterLevelAwake(SimpleCutsceneManager __instance) {
-    //    Log.Info($"SimpleCutsceneManager_EnterLevelAwake {__instance.name}");
-    //}
-    [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayWithoutLockControl")]
-    private static void SimpleCutsceneManager_PlayWithoutLockControl(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_PlayWithoutLockControl {__instance.name}");
-    }
-
-    [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "BeforePlay")]
-    private static void SimpleCutsceneManager_BeforePlay(SimpleCutsceneManager __instance) {
-        Log.Info($"SimpleCutsceneManager_BeforePlay {__instance.name}");
-    }
-
-    [HarmonyPrefix, HarmonyPatch(typeof(ICutScene), "PlayCutscene")]
-    private static void ICutScene_PlayCutscene(ICutScene __instance) {
-        Log.Info($"ICutScene_PlayCutscene {__instance.name}");
-    }
-
-    [HarmonyPatch(typeof(BubbleDialogueController), "ShowNode")]
-    [HarmonyPrefix]
-    private static void BubbleDialogueController_ShowNode(BubbleDialogueController __instance) {
-        Log.Info($"BubbleDialogueController_ShowNode {__instance.name}");
-    }
-
-    [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "TextProgress", [typeof(bool)])]
-    private static void DialoguePlayer_TextProgress(DialoguePlayer __instance, bool BubbleChanged) {
-        Log.Info($"DialoguePlayer_TextProgress {__instance.name} {BubbleChanged}");
-    }
-    [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "UpdateCharacter")]
-    private static void DialoguePlayer_UpdateCharacter(DialoguePlayer __instance) {
-        Log.Info($"DialoguePlayer_UpdateCharacter {__instance.name}");
-    }
-    [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "EndDialogue")]
-    private static void DialoguePlayer_EndDialogue(DialoguePlayer __instance) {
-        Log.Info($"DialoguePlayer_EndDialogue {__instance.name}");
-    }
-    [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "PlayVoice")]
-    private static void DialoguePlayer_PlayVoice(DialoguePlayer __instance) {
-        Log.Info($"DialoguePlayer_PlayVoice {__instance.name}");
-    }
-
-    [HarmonyPrefix, HarmonyPatch(typeof(DialogueBubble), "ShowBubble")]
-    private static void DialogueBubble_ShowBubble(DialogueBubble __instance) {
-        Log.Info($"DialogueBubble_ShowBubble {__instance.name}");
-    }
-    [HarmonyPrefix, HarmonyPatch(typeof(DialogueBubble), "ProgressShowText")]
-    private static void DialogueBubble_ProgressShowText(DialogueBubble __instance) {
-        Log.Info($"DialogueBubble_ProgressShowText {__instance.name}");
-    }
-    [HarmonyPrefix, HarmonyPatch(typeof(DialogueBubble), "EndProgressText")]
-    private static void DialogueBubble_EndProgressText(DialogueBubble __instance) {
-        Log.Info($"DialogueBubble_EndProgressText {__instance.name}");
-    }
-    */
 }
