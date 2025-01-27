@@ -86,19 +86,23 @@ public class Patches {
         ToastManager.Toast($"Press Ctrl+K to Skip This Dialogue");
     }
 
+    // The credits videos aren't skippable, and the intro video is both vanilla skippable and not even a VideoPlayAction.
+    // So with only 2 known video cutscenes that I wanted to and can skip, an allowlist seemed better than a denylist.
     private static HashSet<string> skippableVideos = new HashSet<string> {
+        // true ending - Yi shooting the Rhizomatic Arrow
         "GameLevel/Room/Prefab/SimpleCutSceneFSM_結局_大爆炸/--[States]/FSM/[State] PlayCutSceneEnd/[Action] VideoPlayAction",
+        // Heng flashback after Lady E fight - Yi's first fusang revival
+        "A7_S6_Memory_Butterfly_CutScene_GameLevel/A7_S6_Cutscene FSM/--[States]/FSM/[State] PlayingVideo/[Action] VideoPlayAction",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "OnStateEnterImplement")]
     private static void VideoPlayAction_OnStateEnterImplement(VideoPlayAction __instance) {
         var goPath = GetFullPath(__instance.gameObject);
         Log.Info($"VideoPlayAction_OnStateEnterImplement {goPath}");
-        // TODO: use the allowlist once we're done testing
-        //if (skippableVideos.Contains(goPath)) {
+        if (skippableVideos.Contains(goPath)) {
             CutsceneSkip.activeVideo = __instance;
             ToastManager.Toast($"Press Ctrl+K to Skip This Video");
-        //}
+        }
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "VideoClipDone")]
