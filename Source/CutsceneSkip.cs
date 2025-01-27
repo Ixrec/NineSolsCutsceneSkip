@@ -11,7 +11,11 @@ namespace CutsceneSkip;
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class CutsceneSkip : BaseUnityPlugin {
     // https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/4_configuration.html
-    private ConfigEntry<KeyboardShortcut> skipKeybind = null!;
+    private static ConfigEntry<KeyboardShortcut> skipKeybind = null!;
+
+    public static string SkipKeybindText() {
+        return skipKeybind.Value.Serialize();
+    }
 
     private Harmony harmony = null!;
 
@@ -22,8 +26,8 @@ public class CutsceneSkip : BaseUnityPlugin {
         // Load patches from any class annotated with @HarmonyPatch
         harmony = Harmony.CreateAndPatchAll(typeof(CutsceneSkip).Assembly);
 
-        skipKeybind = Config.Bind("General.SkipKeybind", "SkipKeybind",
-            new KeyboardShortcut(KeyCode.K, KeyCode.LeftControl), "Skip Keybind");
+        skipKeybind = Config.Bind("", "Skip Keybind",
+            new KeyboardShortcut(KeyCode.K, KeyCode.LeftControl), "The keyboard shortcut to actually skip cutscenes and dialogue.");
 
         KeybindManager.Add(this, SkipActiveCutsceneOrDialogue, () => skipKeybind.Value);
 

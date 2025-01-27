@@ -67,7 +67,7 @@ public class Patches {
         } else if (__instance.name.EndsWith("_EnterScene")) {
             Log.Info($"skipping toast for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
         } else {
-            ToastManager.Toast($"Press Ctrl+K to Skip This Cutscene");
+            ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
         }
 
         CutsceneSkip.activeCutscene = __instance;
@@ -83,7 +83,7 @@ public class Patches {
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
     private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance) {
         Log.Info($"DialoguePlayer_StartDialogue {__instance.name}");
-        ToastManager.Toast($"Press Ctrl+K to Skip This Dialogue");
+        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
     }
 
     // The credits videos aren't skippable, and the intro video is both vanilla skippable and not even a VideoPlayAction.
@@ -101,7 +101,7 @@ public class Patches {
         Log.Info($"VideoPlayAction_OnStateEnterImplement {goPath}");
         if (skippableVideos.Contains(goPath)) {
             CutsceneSkip.activeVideo = __instance;
-            ToastManager.Toast($"Press Ctrl+K to Skip This Video");
+            ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Video");
         }
     }
 
@@ -117,18 +117,18 @@ public class Patches {
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
     private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
         Log.Info($"A2_SG4_Logic_EnterLevelStart {__instance.name}");
-        ToastManager.Toast($"Press Ctrl+K to Skip This Heng Flashback");
+        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
     private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
         Log.Info($"A4_S5_Logic_EnterLevelStart {__instance.name}");
-        ToastManager.Toast($"Press Ctrl+K to Skip Pre-Claw Fight Cutscenes");
+        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Pre-Claw Fight Cutscenes");
     }
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "FooGameComplete")]
     private static void A4_S5_Logic_FooGameComplete(A4_S5_Logic __instance) {
         Log.Info($"A4_S5_Logic_FooGameComplete {__instance.name}");
-        ToastManager.Toast($"Press Ctrl+K to Skip Post-Claw Fight Cutscene");
+        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Post-Claw Fight Cutscene");
     }
 
     // Exploratory patches. These can all be commented out.
