@@ -64,26 +64,30 @@ public class Patches {
         } else if (__instance.name == "[CutScene]調閱報告") {
             Log.Info($"not allowing skip for {goPath} because all \"[CutScene]調閱報告\" / Eigong lab report cutscenes risk softlocking when skipped");
             return;
-        } else if (__instance.name.EndsWith("_EnterScene")) {
-            Log.Info($"skipping toast for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
-        } else {
-            ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
         }
 
-        CutsceneSkip.activeCutscene = __instance;
+        string id = "";
+        if (__instance.name.EndsWith("_EnterScene")) {
+            Log.Info($"skipping notification for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
+        } else {
+            id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
+        }
+
+        CutsceneSkip.activeCutscene = (__instance, id);
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "End")]
     private static void SimpleCutsceneManager_End(SimpleCutsceneManager __instance) {
         Log.Debug($"SimpleCutsceneManager_End {__instance.name}");
-        if (CutsceneSkip.activeCutscene == __instance)
-            CutsceneSkip.activeCutscene = null;
+        if (CutsceneSkip.activeCutscene.Item1 == __instance)
+            CutsceneSkip.activeCutscene = (null, "");
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
     private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance) {
         Log.Debug($"DialoguePlayer_StartDialogue {__instance.name}");
-        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
+        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
+        CutsceneSkip.dialogueSkipNotificationId = id;
     }
 
     // The credits videos aren't skippable, and the intro video is both vanilla skippable and not even a VideoPlayAction.
@@ -98,35 +102,41 @@ public class Patches {
     [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "OnStateEnterImplement")]
     private static void VideoPlayAction_OnStateEnterImplement(VideoPlayAction __instance) {
         var goPath = GetFullPath(__instance.gameObject);
-        Log.Info($"VideoPlayAction_OnStateEnterImplement {goPath}");
+        Log.Debug($"VideoPlayAction_OnStateEnterImplement {goPath}");
         if (skippableVideos.Contains(goPath)) {
-            CutsceneSkip.activeVideo = __instance;
-            ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Video");
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Video");
+            CutsceneSkip.activeVideo = (__instance, id);
         }
     }
     [HarmonyPrefix, HarmonyPatch(typeof(VideoPlayAction), "VideoClipDone")]
     private static void VideoPlayAction_VideoClipDone(VideoPlayAction __instance) {
         Log.Debug($"VideoPlayAction_VideoClipDone {__instance.name}");
-        if (CutsceneSkip.activeVideo == __instance)
-            CutsceneSkip.activeVideo = null;
+        if (CutsceneSkip.activeVideo.Item1 == __instance)
+            CutsceneSkip.activeVideo = (null, "");
     }
 
     // The Heng flashback in Power Reservoir got its own special implementation class instead of using SimpleCutsceneManager
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
     private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
         Log.Info($"A2_SG4_Logic_EnterLevelStart / Heng Power Reservoir flashback");
-        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
+        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
+        CutsceneSkip.activeA2SG4 = (__instance, id);
     }
 
     // The Yanlao fight also has a special implementation class not covered by our SimpleCutsceneManager patches
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
     private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
         Log.Info($"A4_S5_Logic_EnterLevelStart / Sky Rending Claw Pre-Fight Scenes");
-        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Pre-Claw Fight Cutscenes");
+        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip Pre-Claw Fight Cutscenes");
+        CutsceneSkip.activeA4S5 = (__instance, id);
     }
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "FooGameComplete")]
     private static void A4_S5_Logic_FooGameComplete(A4_S5_Logic __instance) {
         Log.Info($"A4_S5_Logic_FooGameComplete / Sky Rending Claw Post-Fight Scenes");
-        ToastManager.Toast($"Press {CutsceneSkip.SkipKeybindText()} to Skip Post-Claw Fight Cutscene");
+        if (CutsceneSkip.activeA4S5.Item1 != null) {
+            Notifications.CancelNotification(CutsceneSkip.activeA4S5.Item2);
+        }
+        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip Post-Claw Fight Cutscene");
+        CutsceneSkip.activeA4S5 = (__instance, id);
     }
 }

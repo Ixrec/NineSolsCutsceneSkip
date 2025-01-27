@@ -32,21 +32,27 @@ public class CutsceneSkip : BaseUnityPlugin {
         KeybindManager.Add(this, SkipActiveCutsceneOrDialogue, () => skipKeybind.Value);
 
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+
+        Notifications.Awake();
     }
 
-    public static SimpleCutsceneManager? activeCutscene = null;
-    public static VideoPlayAction? activeVideo = null;
+    public static (A2_SG4_Logic?, string) activeA2SG4 = (null, "");
+    public static (A4_S5_Logic?, string) activeA4S5 = (null, "");
+    public static string dialogueSkipNotificationId = "";
+    public static (SimpleCutsceneManager?, string) activeCutscene = (null, "");
+    public static (VideoPlayAction?, string) activeVideo = (null, "");
 
     private void SkipActiveCutsceneOrDialogue() {
-        var hengPRFlashback = GameObject.Find("A2_SG4/Logic")?.GetComponent<A2_SG4_Logic>();
-        if (hengPRFlashback != null) {
+        if (activeA2SG4.Item1 != null) {
+            var hengPRFlashback = activeA2SG4.Item1;
             Log.Info($"Found A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, calling A2_SG4_Logic.TrySkip() as a special case");
             hengPRFlashback.TrySkip();
+            Notifications.CancelNotification(activeA2SG4.Item2);
             return;
         }
 
-        var yl = GameObject.Find("A4_S5/A4_S5_Logic(DisableMeForBossDesign)")?.GetComponent<A4_S5_Logic>();
-        if (yl != null) {
+        if (activeA4S5.Item1 != null) {
+            var yl = activeA4S5.Item1;
             if (yl.BossKilled.CurrentValue) {
                 Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw already killed. Applying special case logic to skip post-fight scene.");
                 yl.FinishCutscene.TrySkip();
@@ -63,6 +69,7 @@ public class CutsceneSkip : BaseUnityPlugin {
                 yl.BubbleDialogue.TrySkip();
                 yl.TrySkip();
             }
+            Notifications.CancelNotification(activeA4S5.Item2);
             return;
         }
 
@@ -71,41 +78,47 @@ public class CutsceneSkip : BaseUnityPlugin {
         if (dp != null) {
             var playingDialogueGraph = AccessTools.FieldRefAccess<DialoguePlayer, DialogueGraph>("playingDialogueGraph").Invoke(dp);
             if (playingDialogueGraph != null) {
+                Log.Info($"calling DialoguePlayer.playingDialogueGraph.TrySkip()");
                 dp.TrySkip();
-                ToastManager.Toast($"Dialogue Skipped");
+                if (dialogueSkipNotificationId != "") {
+                    Notifications.CancelNotification(dialogueSkipNotificationId);
+                    dialogueSkipNotificationId = "";
+                }
                 return;
             }
-            Log.Debug($"no dialogue was playing");
-        } else {
-            Log.Debug($"dp was null");
         }
 
-        if (activeCutscene != null) {
-            Log.Info($"calling TrySkip() on {activeCutscene.name}");
-            AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(activeCutscene, []);
-            if (AccessTools.FieldRefAccess<SimpleCutsceneManager, bool>("isMangaPauseing").Invoke(activeCutscene)) {
+        if (activeCutscene.Item1 != null) {
+            var scm = activeCutscene.Item1;
+            Log.Info($"calling TrySkip() on {scm.name}");
+            AccessTools.Method(typeof(SimpleCutsceneManager), "TrySkip").Invoke(scm, []);
+            if (AccessTools.FieldRefAccess<SimpleCutsceneManager, bool>("isMangaPauseing").Invoke(scm)) {
                 Log.Info($"also calling Resume() since it was 'manga paused'");
-                AccessTools.Method(typeof(SimpleCutsceneManager), "Resume").Invoke(activeCutscene, []);
+                AccessTools.Method(typeof(SimpleCutsceneManager), "Resume").Invoke(scm, []);
             }
-            activeCutscene = null;
-
-            ToastManager.Toast($"Cutscene Skipped");
+            Notifications.CancelNotification(activeCutscene.Item2);
+            activeCutscene = (null, "");
             return;
         }
 
-        if (activeVideo != null) {
-            Log.Info($"calling TrySkip() on {activeVideo.name}");
-            AccessTools.Method(typeof(VideoPlayAction), "TrySkip").Invoke(activeVideo, []);
-            activeVideo = null;
-
-            ToastManager.Toast($"Video Skipped");
+        if (activeVideo.Item1 != null) {
+            var vpa = activeVideo.Item1;
+            Log.Info($"calling TrySkip() on {vpa.name}");
+            AccessTools.Method(typeof(VideoPlayAction), "TrySkip").Invoke(vpa, []);
+            Notifications.CancelNotification(activeVideo.Item2);
+            activeVideo = (null, "");
             return;
         }
+    }
+
+    private void Update() {
+        Notifications.Update();
     }
 
     private void OnDestroy() {
         // Make sure to clean up resources here to support hot reloading
 
         harmony.UnpatchSelf();
+        Notifications.OnDestroy();
     }
 }
