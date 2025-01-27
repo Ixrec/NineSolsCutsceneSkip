@@ -1,59 +1,23 @@
-# Nine Sols Example Mod
+# Nine Sols Cutscene Skip
 
-## Set up your mod
-1. Set up modding with BepInEx and r2modman: [Wiki: Getting Started](https://github.com/nine-sols-modding/Resources/wiki/Getting-started)
-   1. download the `NineSolsAPI` mod if you want to use it, 
-2. clone this repo ([generate from this template](https://github.com/new?template_name=NineSols-ExampleMod&template_owner=jakobhellermann), then update the `.csproj`
-   1. Change `<AssemblyName>` to your mod name
-   2. Make sure the `<NineSolsPath>` points to the installed game
-3. Install `tcli` tool for building thunderstore mods: `dotnet tool install -g tcli`
-4. Follow the **Building** section to make sure everything works as expected. Load into a game and press `Ctrl-H` to toggle your hat wherever you are.
+A Nine Sols mod that enables skipping any cutscene or dialogue (that won't break the game).
 
-_Next steps_:
-- setup hot reloading for faster iteration times
-- use a tool like [ILSpy](https://github.com/icsharpcode/ILSpy) or [dnSpy](https://github.com/dnSpy/dnSpy) to decompile the game code
-- check out the [UnityExplorer](https://thunderstore.io/c/nine-sols/p/ninesolsmodding/UnityExplorer/) mod to investigate objects in the game
+This should cover all of the game's longest cutscenes (Heng flashbacks, the prison capture sequence, the Point of no Return scenes, all conversations and phone calls) as well as many smaller ones that are safe to skip (some boss transitions, most of the Pavilion NPC interactions, etc). However, many smaller cutscenes (e.g. some Yi elevator rides) are deliberately not made skippable because trying to skip them would break the game in some way (e.g. leave Yi stuck in a wall).
 
-## Building
+Whenever the mod detects something it knows how to skip safely, it will display a notification in the bottom right corner prompting you to skip. The keybind for actually skipping can also be changed (if you're new to Nine Sols mods, press F1 to change settings like that).
 
-If you run
-```sh
-dotnet publish
-```
-it will build the DLL of your mod (`Source/bin/Release/netstandard2.1/publish/ExampleMod.dll`), then use `tcli` to
-package the mod into a thunderstore-compatible zip in `thunderstore/build/`.
+As a demonstration, this is what it looks like to skip the Point of no Return cutscenes:
 
-You can import that mod into your r2modman instance like this:
-<img alt="r2modman config to import local mod" src="https://github.com/user-attachments/assets/c8e02c83-5d71-4a65-89ef-acf93db85327" width="600">
+![Demonstration: Skipping the Point of no Return Cutscenes](https://github.com/Ixrec/NineSolsCutsceneSkip/blob/main/ponr_demo.gif)
 
+If you find a way to break the game with this mod, please open an issue on this repository.
 
-## Publishing
+## Contribution / Development
 
-Make sure to fill out all fields in the [thunderstore.toml](./thunderstore/thunderstore.toml).
-Then go to https://thunderstore.io/c/nine-sols/create and upload your mod zip, or use tcli with a token created in
-[thunderstore.io](thunderstore.io) at `Settings / Teams / Service Accounts`:
-```sh
-tcli build --config-path ../thunderstore/thunderstore.toml --token $token
-```
+Should be the same as any other Nine Sols mod. See https://github.com/nine-sols-modding/NineSols-ExampleMod for detailed instructions.
 
-## Hot Reloading
+PRs welcome to skip even more stuff.
 
-Building the mod and restarting the game after every minor change becomes cumbersome quickly. Luckily, BepInEx supports hot reloading of DLLs via [ScriptEngine](https://github.com/BepInEx/BepInEx.Debug).
+## What about Cheat Menu?
 
-Download the [ScriptEngine](https://thunderstore.io/c/nine-sols/p/ninesolsmodding/BepinExScriptEngine/) mod in your r2modman instance, and the game will be able to reload DLLs from `r2modmanProfileFolder/BepInEx/scripts/`.
-
-Go into the `ExampleMod.csproj` file and fill out the `<ProfileDir>` and uncomment the `<CopyDir>` below it.
-Now, whenever you hit "Build" in your IDE, the mod DLL will be placed into that `scripts` folder.
-
-Note: **Disable your mod in r2modman if it is active to prevent it from being loaded twice!**
-
-By default, ScriptEngine will only reload scripts when you press `F6`, but you can go into r2modman's Config Editor and 
-edit `BepInEx\config\com.bepis.bepinex.scriptengine.cfg` to have
-- `EnableFileSystemWatcher=true`
-- `AutoReloadDelay=0`
-- `LoadOnStart=true`
-
-to reload scripts immediately.
-
-Hot reloading works by first destroying your mod instance game objects and then reinstantiating them, so make sure to clean
-up any state you left in the `OnDestroy` callback.
+The skip feature in Yukikaco's CheatMenu will simply skip anything it can find in the current level with a `.TrySkip()` method. This is sometimes useful for developers, but for normal gameplay this is dangerous and will softlock in dozens of places.
