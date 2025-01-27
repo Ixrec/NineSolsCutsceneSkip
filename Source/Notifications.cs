@@ -6,6 +6,13 @@ using System.Linq;
 
 namespace CutsceneSkip;
 
+/*
+ * I wrote my own notification manager for two reasons:
+ * - NineSolsAPI.ToastManager does not support cancelling toasts. I suspect this is the difference between
+ * a "toast" and a "notification", i.e. is correctly out of scope for NSAPI, but I want cancellation here.
+ * - NineSolsAPI.ToastManager breaks whenever you quit to the main menu, because RCGLifeCycle.DontDestroyForever()
+ * doesn't protect child objects. This class only uses a single GO, so it doesn't have that problem.
+ */
 internal class Notifications {
     private static Canvas CanvasComponent = null!;
     private static TextMeshProUGUI TextComponent = null;
