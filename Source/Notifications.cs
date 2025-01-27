@@ -82,7 +82,10 @@ internal class Notifications {
         notificationStack.Add(new Notification {
             id = id,
             timestamp = DateTimeOffset.UtcNow,
-            displayText = displayText,
+            // I experimented with markdown like $"<mark=#00000010 padding=\"20, 20, 0, 0\">{displayText}</mark>", but
+            // found that anything which looks great on a bright background looks much darker on a dark background.
+            // And unfortunately text.outlineWidth doesn't work at all.
+            displayText = displayText
         });
 
         isDirty = true;
