@@ -8,7 +8,7 @@ Whenever the mod detects something it knows how to skip safely, it will display 
 
 As a demonstration, this is what it looks like to skip the Point of no Return cutscenes:
 
-![Demonstration: Skipping the Point of no Return Cutscenes](https://github.com/Ixrec/NineSolsCutsceneSkip/blob/main/ponr_demo.gif)
+![Demonstration: Skipping the Point of no Return Cutscenes](https://github.com/Ixrec/NineSolsCutsceneSkip/blob/main/ponr_demo.gif?raw=true)
 
 If you find a way to break the game with this mod, please open an issue on this repository.
 
