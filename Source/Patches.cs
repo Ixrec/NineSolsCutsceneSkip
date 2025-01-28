@@ -31,6 +31,7 @@ public class Patches {
         "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/[CutScene]/[CutScene]Goumang_Explosion_Drop/[Timeline]Goumang_Explosion_Drop",
         "A5_S2/Room/SimpleCutSceneFSM_A5妹妹回憶/FSM Animator/LogicRoot/[CutScene]",
         "GameLevel/Room1/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yi and Shuanshuan's dinner during intro
+        "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/NPC_AICore_Base/NPC_AICore_Base_FSM/FSM Animator/LogicRoot/[CutScene]AI核心解鎖", // first Ruyi activation after finding nymph
         // skipping this leaves Yi stuck somewhere he can't get out of
         "GameLevel/Room1/SimpleCutSceneFSM_EnterVilliage/FSM Animator/LogicRoot/[CutScene]", // first time walking into PBV during intro
         "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into BR
