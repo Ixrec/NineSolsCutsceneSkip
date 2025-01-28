@@ -42,6 +42,8 @@ public class Patches {
         "A1_S1_GameLevel/Room/A1_S1_Tutorial_Logic/[CutScene]AfterTutorial_AI_Call/[Timeline]",
         // skipping this door opening animation leaves the door closed
         "A4_S3/Room/Prefab/ElementRoom/ElementDoor FSM/ElementDoor FSM/FSM Animator/LogicRoot/[CutScene]Eenter_A4SG4",
+        // skipping this entry animation prevents Yi from actually entering the place
+        "A7_S1/Room/Prefab/A7_S1_三階段FSM/FSM Animator/Phase2_A7Entry/花入口 FSM Object/FSM Animator/LogicRoot/[CutScene] 進入演出", // Lady E soulscape 1st entrance
         // skipping this prevents a boss from dropping an item, i.e. breaks a randomizer location
         "A2_S5_ BossHorseman_GameLevel/Room/Simple Binding Tool/Boss_SpearHorse_Logic/[CutScene]SpearHorse_End",
         "A0_S6/Room/Prefab/SimpleCutSceneFSM_道長死亡/FSM Animator/LogicRoot/Cutscene_TaoChangPart2",
@@ -51,6 +53,10 @@ public class Patches {
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_Finish",
         // skips the post-PonR hallway, including all of the actual fighting, which is out of scope for this mod
         "A11_S2/Room/Prefab/EventBinder/OldBoy FSM Object/FSM Animator/LogicRoot/[CutScene]OldBoyFighting/[Timeline]",
+        // these are background dialogue bubbles in Lady E's hot springs, not a useful thing to "skip" and likely confusing
+        "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
+        "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
+        "A7_ButterflyTest/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
