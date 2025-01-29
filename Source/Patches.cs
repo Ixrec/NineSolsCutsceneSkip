@@ -132,6 +132,14 @@ public class Patches {
         var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
         CutsceneSkip.activeA2SG4 = (__instance, id);
     }
+    [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "OnLevelDestroy")]
+    private static void A2_SG4_Logic_OnLevelDestroy(A2_SG4_Logic __instance) {
+        Log.Info($"A2_SG4_Logic_OnLevelDestroy / Heng Power Reservoir flashback");
+        if (CutsceneSkip.activeA2SG4.Item1 == __instance) {
+            Notifications.CancelNotification(CutsceneSkip.activeA2SG4.Item2);
+            CutsceneSkip.activeA2SG4 = (null, "");
+        }
+    }
 
     // The Yanlao fight also has a special implementation class not covered by our SimpleCutsceneManager patches
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]

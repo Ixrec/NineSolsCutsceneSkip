@@ -45,9 +45,31 @@ public class CutsceneSkip : BaseUnityPlugin {
     private void SkipActiveCutsceneOrDialogue() {
         if (activeA2SG4.Item1 != null) {
             var hengPRFlashback = activeA2SG4.Item1;
+
+            var done = AccessTools.FieldRefAccess<A2_SG4_Logic, bool>("_done").Invoke(hengPRFlashback);
+            if (done) {
+                Log.Info($"A2_SG4_Logic's _done flag is already set. Player must have skipped too early. Resetting _done flag back to false.");
+                AccessTools.FieldRefAccess<A2_SG4_Logic, bool>("_done").Invoke(hengPRFlashback) = false;
+
+                var s2ConnectionTouched = AccessTools.FieldRefAccess<SceneConnectionPoint, bool>("touchedChangeSceneTrigger").Invoke(hengPRFlashback.connectionToS2);
+                if (s2ConnectionTouched) {
+                    Log.Info($"A2_SG4_Logic::connectionToS2's touchedChangeSceneTrigger flag is also already set. Also resetting that touchedChangeSceneTrigger flag back to false.");
+                    AccessTools.FieldRefAccess<SceneConnectionPoint, bool>("touchedChangeSceneTrigger").Invoke(hengPRFlashback.connectionToS2) = false;
+                }
+                var s3ConnectionTouched = AccessTools.FieldRefAccess<SceneConnectionPoint, bool>("touchedChangeSceneTrigger").Invoke(hengPRFlashback.connectionToS3);
+                if (s3ConnectionTouched) {
+                    Log.Info($"A2_SG4_Logic::connectionToS3's touchedChangeSceneTrigger flag is also already set. Also resetting that touchedChangeSceneTrigger flag back to false.");
+                    AccessTools.FieldRefAccess<SceneConnectionPoint, bool>("touchedChangeSceneTrigger").Invoke(hengPRFlashback.connectionToS3) = false;
+                }
+            }
+
             Log.Info($"Found A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, calling A2_SG4_Logic.TrySkip() as a special case");
             hengPRFlashback.TrySkip();
             Notifications.CancelNotification(activeA2SG4.Item2);
+
+            if (done) {
+                activeA2SG4.Item1 = null; // don't keep repeating this if the player is mashing, that also softlocks
+            }
             return;
         }
 
