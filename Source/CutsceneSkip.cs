@@ -83,6 +83,18 @@ public class CutsceneSkip : BaseUnityPlugin {
                     Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw not yet killed. But claw is already active, so trying to skip this now would just softlock. Doing nothing.");
                     return;
                 }
+
+                var bubbleIndex = AccessTools.FieldRefAccess<BubbleDialogueController, int>("index").Invoke(yl.BeforeMangaBubble);
+                var hasReachedManga = (bubbleIndex >= yl.BeforeMangaBubble.nodes.Count);
+                if (hasReachedManga) {
+                    var isMangaPauseing = AccessTools.FieldRefAccess<SimpleCutsceneManager, bool>("isMangaPauseing").Invoke(yl.StartCutscene);
+                    if (!isMangaPauseing) {
+                        Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Appears to be in a manga transition animation, which in this scene would cause the fight to start " +
+                            $"without the screen activating so you can see it. Doing nothing for now; try again when the manga is done animating and waiting for input.");
+                        return;
+                    }
+                }
+
                 Log.Info($"Found A4_S5_Logic a.k.a. Sky Rending Claw fight. Claw not yet killed. Applying special case logic to skip pre-fight scenes.");
                 var ylmc = GameObject.Find("A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START/MangaView_OriginalPrefab/MANGACanvas");
                 ylmc.SetActive(false);

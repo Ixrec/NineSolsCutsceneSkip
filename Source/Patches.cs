@@ -165,8 +165,10 @@ public class Patches {
 
     // The Yanlao fight also has a special implementation class not covered by our SimpleCutsceneManager patches
     [HarmonyPrefix, HarmonyPatch(typeof(A4_S5_Logic), "EnterLevelStart")]
-    private static void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
+    private static async void A4_S5_Logic_EnterLevelStart(A4_S5_Logic __instance) {
         Log.Info($"A4_S5_Logic_EnterLevelStart / Sky Rending Claw Pre-Fight Scenes");
+        // This also softlocks if you skip it at the earliest possible moment
+        await UniTask.DelayFrame(100); // completely arbitrary number, have not tested how framerate settings affect this
         var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip Pre-Claw Fight Cutscenes");
         CutsceneSkip.activeA4S5 = (__instance, id);
     }
