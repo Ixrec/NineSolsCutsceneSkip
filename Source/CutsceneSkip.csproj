@@ -22,12 +22,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="Unity.TextMeshPro">
-            <HintPath>$(NineSolsPath)/NineSols_Data/Managed/Unity.TextMeshPro.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UI">
-            <HintPath>$(NineSolsPath)/NineSols_Data/Managed/UnityEngine.UI.dll</HintPath>
-        </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>$(NineSolsPath)/NineSols_Data/Managed/Assembly-CSharp.dll</HintPath>
         </Reference>
@@ -41,6 +35,15 @@
             <HintPath>$(NineSolsPath)/NineSols_Data/Managed/InControl.dll</HintPath>
         </Reference>
 		<!-- references that weren't in the ExampleMod template -->
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(NineSolsPath)/NineSols_Data/Managed/Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(NineSolsPath)/NineSols_Data/Managed/UnityEngine.UI.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask">
+			<HintPath>$(NineSolsPath)/NineSols_Data/Managed/UniTask.dll</HintPath>
+		</Reference>
 		<Reference Include="XNode">
 			<HintPath>$(NineSolsPath)/NineSols_Data/Managed/XNode.dll</HintPath>
 		</Reference>

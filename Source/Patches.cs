@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using NineSolsAPI;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,9 +59,20 @@ public class Patches {
         "A7_ButterflyTest/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
     };
 
+    // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
+    // so we introduce an artificial delay to prevent users from hitting the problem
+    private static List<string> skipDelaylist = new List<string> {
+        // softlocks if skipped instantly
+        "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
+    };
+
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
     private static void SimpleCutsceneManager_PlayAnimation(SimpleCutsceneManager __instance) {
         var goPath = GetFullPath(__instance.gameObject);
+        if (skipDelaylist.Contains(goPath)) {
+            return;
+        }
+
         Log.Debug($"SimpleCutsceneManager_PlayAnimation {goPath}");
         if (skipDenylist.Contains(goPath)) {
             Log.Info($"not allowing skip for cutscene {goPath} because it's on the skip denylist");
@@ -84,6 +95,17 @@ public class Patches {
         }
 
         CutsceneSkip.activeCutscene = (__instance, id);
+    }
+
+    [HarmonyPostfix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
+    private static async void SimpleCutsceneManager_PlayAnimation_Postfix(SimpleCutsceneManager __instance) {
+        var goPath = GetFullPath(__instance.gameObject);
+        if (skipDelaylist.Contains(goPath)) {
+            await UniTask.DelayFrame(100); // completely arbitrary number, have not tested how framerate settings affect this
+            Log.Info($"SimpleCutsceneManager_PlayAnimation acting on {goPath} with delay (i.e. Postfix patch + 100 frame wait) to avoid softlocking");
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
+            CutsceneSkip.activeCutscene = (__instance, id);
+        }
     }
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "End")]
