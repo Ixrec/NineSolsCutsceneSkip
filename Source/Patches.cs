@@ -65,6 +65,9 @@ public class Patches {
     private static List<string> skipDelaylist = new List<string> {
         // softlocks if skipped instantly
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
+        // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
+        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 一進", // full version for first attempt
+        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
