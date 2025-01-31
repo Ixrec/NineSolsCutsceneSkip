@@ -19,8 +19,9 @@ public class Patches {
     }
 
     private static List<string> skipDenylist = new List<string> {
-        // skipping this leaves enemies in unintended, possibly softlocking places, such as stuck inside walls
-        "A1_S2_GameLevel/Room/Prefab/Gameplay2_Alina/Simple Binding Tool/SimpleCutSceneFSM_關門戰開頭演出/FSM Animator/LogicRoot/[CutScene]",
+        // skipping this leaves enemies you need to kill stuck inside or behind walls
+        "A1_S2_GameLevel/Room/Prefab/Gameplay2_Alina/Simple Binding Tool/SimpleCutSceneFSM_關門戰開頭演出/FSM Animator/LogicRoot/[CutScene]", // AF(E) locked room after upper node
+        "GameLevel/Room/Prefab/村民避難所_階段 FSM Object/FSM Animator/View/村民避難所ControlRoom/Phase3(二次入侵)/General FSM A0_S10 二次入侵/FSM Animator/LogicRoot/[CutScene] 戰鬥前", // 2nd PBV invasion in GD
         // skipping this softlocks immediately
         "A2_S1/Room/Prefab/EnterPyramid_Acting/[CutScene]ActivePyramidAndEnter",
         "A3_S1/Room/Prefab/妹妹回憶_SimpleCutSceneFSM Variant/FSM Animator/LogicRoot/[CutScene]",
