@@ -42,7 +42,21 @@ public class CutsceneSkip : BaseUnityPlugin {
     public static (SimpleCutsceneManager?, string) activeCutscene = (null, "");
     public static (VideoPlayAction?, string) activeVideo = (null, "");
 
+    public static string KuafuEndingChoiceCutsceneGOPath = "AG_S2/Room/NPCs/SimpleCutSceneFSM_結尾/FSM Animator/LogicRoot/[CutScene]";
+    public static bool KuafuEndingChoiceCutsceneActive() {
+        if (activeCutscene.Item1 == null)
+            return false;
+
+        var kuafuEndingChoiceScene = GameObject.Find(KuafuEndingChoiceCutsceneGOPath);
+        return activeCutscene.Item1.gameObject == kuafuEndingChoiceScene;
+    }
+
     private void SkipActiveCutsceneOrDialogue() {
+        if (KuafuEndingChoiceCutsceneActive()) {
+            Log.Info($"Not allowing the player to skip anything because we're in the Kuafu ending choice conversation, where even dialogue skipping softlocks.");
+            return;
+        }
+
         if (activeA2SG4.Item1 != null) {
             var hengPRFlashback = activeA2SG4.Item1;
 

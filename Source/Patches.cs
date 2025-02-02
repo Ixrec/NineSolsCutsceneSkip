@@ -93,7 +93,9 @@ public class Patches {
         }
 
         string id = "";
-        if (__instance.name.EndsWith("_EnterScene")) {
+        if (__instance.gameObject == GameObject.Find(CutsceneSkip.KuafuEndingChoiceCutsceneGOPath)) {
+            Log.Info($"Not prompting player to skip this cutscene because it's in the Kuafu ending choice conversation, where even dialogue skipping softlocks.");
+        } else if (__instance.name.EndsWith("_EnterScene")) {
             Log.Info($"skipping notification for {__instance.name} because transition 'cutscenes' are typically over before the player can even see the toast");
         } else {
             id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
@@ -122,6 +124,11 @@ public class Patches {
 
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
     private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance) {
+        if (CutsceneSkip.KuafuEndingChoiceCutsceneActive()) {
+            Log.Info($"Not prompting player to skip this dialogue because it's in the Kuafu ending choice conversation, where even dialogue skipping softlocks.");
+            return;
+        }
+
         Log.Debug($"DialoguePlayer_StartDialogue {__instance.name}");
         var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
         CutsceneSkip.dialogueSkipNotificationId = id;
