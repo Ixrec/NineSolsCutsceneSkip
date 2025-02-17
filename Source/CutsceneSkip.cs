@@ -57,8 +57,16 @@ public class CutsceneSkip : BaseUnityPlugin {
             return;
         }
 
+        var dpgo = GameObject.Find("GameCore(Clone)/RCG LifeCycle/UIManager/GameplayUICamera/Always Canvas/DialoguePlayer(KeepThisEnable)");
+        var dp = dpgo?.GetComponent<DialoguePlayer>();
+
         if (activeA2SG4.Item1 != null) {
             var hengPRFlashback = activeA2SG4.Item1;
+
+            if (dp != null && dp.phoneUI.phoneRingAnimator.GetCurrentAnimatorStateInfo(0).IsName("Webcam_Show")) {
+                Log.Info($"Found A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, but doing nothing because the phone UI is currently ringing. If we skip now that ringing will go on forever.");
+                return;
+            }
 
             var done = AccessTools.FieldRefAccess<A2_SG4_Logic, bool>("_done").Invoke(hengPRFlashback);
             if (done) {
@@ -121,8 +129,6 @@ public class CutsceneSkip : BaseUnityPlugin {
             return;
         }
 
-        var dpgo = GameObject.Find("GameCore(Clone)/RCG LifeCycle/UIManager/GameplayUICamera/Always Canvas/DialoguePlayer(KeepThisEnable)");
-        var dp = dpgo?.GetComponent<DialoguePlayer>();
         if (dp != null) {
             var playingDialogueGraph = AccessTools.FieldRefAccess<DialoguePlayer, DialogueGraph>("playingDialogueGraph").Invoke(dp);
             if (playingDialogueGraph != null) {
