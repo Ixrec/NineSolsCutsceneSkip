@@ -69,6 +69,9 @@ public class Patches {
         // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 一進", // full version for first attempt
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
+        // According to MattStrats, the Lady E fight can also lose many of its sound effects if these are skipped early, though I could not reproduce myself
+        "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]FirstTimeContact/[Timeline]", // full version for first attempt
+        "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]SecondTimeContact/[Timeline]", // quick refight version
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
