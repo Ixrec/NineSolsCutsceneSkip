@@ -68,6 +68,8 @@ public class Patches {
         "A7_ButterflyTest/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
         // skipping this either softlocks or prevents Goumang from turning on the lights in her boss arena, depending on technical details; either way it's not worth it
         "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/[CutScene]/[CutScene]LightUp",
+        // Outer Warehouse hack in the lower left corner; skipping this prevents the crates and crushers from moving as intended
+        "A4_S1/Room/Prefab/Gameplay_3/左下開電/PowerOnFSM/FSM Animator/LogicRoot/[CutScene FSM]PowerOn/FSM Animator/LogicRoot/[CutScene]",
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
@@ -93,7 +95,7 @@ public class Patches {
             return;
         }
 
-        Log.Debug($"SimpleCutsceneManager_PlayAnimation {goPath}");
+        Log.Info($"SimpleCutsceneManager_PlayAnimation {goPath}");
         if (skipDenylist.Contains(goPath)) {
             Log.Info($"not allowing skip for cutscene {goPath} because it's on the skip denylist");
             return;
