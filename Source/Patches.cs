@@ -78,6 +78,7 @@ public class Patches {
         // softlocks if skipped instantly
         "GameLevel/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]Altar/[Timeline]Altar", // PBV intro ceremony/harvesting scene
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到棋盤/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the Qiankun Board
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
         "VR_TaoChang/Room/SimpleCutSceneFSM_易公後妹妹回憶/FSM Animator/LogicRoot/[CutScene]", // Heng flashback after being trapped in Eigong's soulscape
         // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
