@@ -30,13 +30,11 @@ public class Patches {
         "A3_S1/Room/Prefab/妹妹回憶_SimpleCutSceneFSM Variant/FSM Animator/LogicRoot/[CutScene]",
         "A4_S4/ZGunAndDoor/Shield Giant Bot Control Provider Variant_Cutscene/Hack Control Monster FSM/FSM Animator/LogicRoot/Cutscene/LogicRoot/[CutScene]",
         "A5_S5/Room/SimpleCutSceneFSM_JieChuan and Jee/FSM Animator/LogicRoot/[CutScene]",
-        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 易公死亡", // = Eigong death, skipping leaves you trapped in her arena
         "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/[CutScene]/[CutScene]Goumang_Explosion_Drop/[Timeline]Goumang_Explosion_Drop",
         "A5_S2/Room/SimpleCutSceneFSM_A5妹妹回憶/FSM Animator/LogicRoot/[CutScene]",
         "GameLevel/Room1/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yi and Shuanshuan's dinner during intro"
         "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/NPC_AICore_Base/NPC_AICore_Base_FSM/FSM Animator/LogicRoot/[CutScene]AI核心解鎖", // first Ruyi activation after finding nymph
-        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]", // listening to the vinyl record w/ Shuanshuan
         "A4_S5/Room/TaoChangSniper_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yanlao fight teaser on entering BR gauntlet
         // skipping this leaves Yi stuck somewhere he can't get out of
         "GameLevel/Room1/SimpleCutSceneFSM_EnterVilliage/FSM Animator/LogicRoot/[CutScene]", // first time walking into PBV during intro
@@ -80,6 +78,8 @@ public class Patches {
         "GameLevel/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]Altar/[Timeline]Altar", // PBV intro ceremony/harvesting scene
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到棋盤/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the Qiankun Board
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]", // listening to the vinyl record w/ Shuanshuan
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
         "VR_TaoChang/Room/SimpleCutSceneFSM_易公後妹妹回憶/FSM Animator/LogicRoot/[CutScene]", // Heng flashback after being trapped in Eigong's soulscape
         // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
