@@ -52,8 +52,10 @@ public class Patches {
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START",
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSENE_EMERGENCY",
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_Finish",
-        // skips the post-PonR hallway, including all of the actual fighting, which is out of scope for this mod
-        "A11_S2/Room/Prefab/EventBinder/OldBoy FSM Object/FSM Animator/LogicRoot/[CutScene]OldBoyFighting/[Timeline]",
+        // these "cutscenes" are actual gameplay segments the player is supposed to fight through, so skipping them is out of scope for this mod
+        "A11_S2/Room/Prefab/EventBinder/OldBoy FSM Object/FSM Animator/LogicRoot/[CutScene]OldBoyFighting/[Timeline]", // post-PonR hallway
+        "A3_S1/Room/Prefab/Gameplay_Boat/Bell_Boat FSM/Boat_Timeline FSM Object  Variant/FSM Animator/View/[CutScene]DragonBoat_Moving/[Timeline]", // LYR dragon boat ride
+        "A3_S3/Room/Prefab/Gameplay_Boat/Bell_Boat FSM/Boat_Timeline FSM Object  Variant/FSM Animator/View/[CutScene]DragonBoat_Moving/[Timeline]", // W&OS dragon boat ride
         // these are background dialogue bubbles in Lady E's hot springs, not a useful thing to "skip" and likely confusing
         "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
         "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
@@ -64,6 +66,7 @@ public class Patches {
     // so we introduce an artificial delay to prevent users from hitting the problem
     private static List<string> skipDelaylist = new List<string> {
         // softlocks if skipped instantly
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
         "VR_TaoChang/Room/SimpleCutSceneFSM_易公後妹妹回憶/FSM Animator/LogicRoot/[CutScene]", // Heng flashback after being trapped in Eigong's soulscape
         // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
