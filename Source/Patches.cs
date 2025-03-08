@@ -95,10 +95,10 @@ public class Patches {
         }
 
         if (__instance.name.EndsWith("[TimeLine]CrateEnter_L") || __instance.name.EndsWith("[TimeLine]CrateEnter_R")) {
-            Log.Info($"not allowing skip for {goPath} because all crate exit 'cutscenes' I've tested instantly softlock when skipped");
+            Log.Debug($"not allowing skip for {goPath} because all crate exit 'cutscenes' I've tested instantly softlock when skipped");
             return;
         } else if (__instance.name == "[CutScene]調閱報告") {
-            Log.Info($"not allowing skip for {goPath} because all \"[CutScene]調閱報告\" / Eigong lab report cutscenes risk softlocking when skipped");
+            Log.Debug($"not allowing skip for {goPath} because all \"[CutScene]調閱報告\" / Eigong lab report cutscenes risk softlocking when skipped");
             return;
         }
 
