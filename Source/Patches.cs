@@ -36,6 +36,7 @@ public class Patches {
         "GameLevel/Room1/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yi and Shuanshuan's dinner during intro"
         "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/NPC_AICore_Base/NPC_AICore_Base_FSM/FSM Animator/LogicRoot/[CutScene]AI核心解鎖", // first Ruyi activation after finding nymph
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]", // listening to the vinyl record w/ Shuanshuan
+        "A4_S5/Room/TaoChangSniper_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yanlao fight teaser on entering BR gauntlet
         // skipping this leaves Yi stuck somewhere he can't get out of
         "GameLevel/Room1/SimpleCutSceneFSM_EnterVilliage/FSM Animator/LogicRoot/[CutScene]", // first time walking into PBV during intro
         "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into BR
