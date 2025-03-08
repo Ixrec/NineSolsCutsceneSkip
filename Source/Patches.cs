@@ -47,9 +47,11 @@ public class Patches {
         "A4_S3/Room/Prefab/ElementRoom/ElementDoor FSM/ElementDoor FSM/FSM Animator/LogicRoot/[CutScene]Eenter_A4SG4",
         // skipping this entry animation prevents Yi from actually entering the place
         "A7_S1/Room/Prefab/A7_S1_三階段FSM/FSM Animator/Phase2_A7Entry/花入口 FSM Object/FSM Animator/LogicRoot/[CutScene] 進入演出", // Lady E soulscape 1st entrance
-        // skipping this prevents a boss from dropping an item, i.e. breaks a randomizer location
-        "A2_S5_ BossHorseman_GameLevel/Room/Simple Binding Tool/Boss_SpearHorse_Logic/[CutScene]SpearHorse_End",
-        "A0_S6/Room/Prefab/SimpleCutSceneFSM_道長死亡/FSM Animator/LogicRoot/Cutscene_TaoChangPart2",
+        // skipping this prevents Yi from receiving an item / makes a randomizer location perma-missable
+        "A2_S5_ BossHorseman_GameLevel/Room/Simple Binding Tool/Boss_SpearHorse_Logic/[CutScene]SpearHorse_End", // Yingzhao drop
+        "A0_S6/Room/Prefab/SimpleCutSceneFSM_道長死亡/FSM Animator/LogicRoot/Cutscene_TaoChangPart2", // Yanlao flower
+        "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/NPC_AICore_Base/NPC_AICore_Base_FSM/FSM Animator/LogicRoot/NPC_AICore_FSM/General FSM Object/Animator(FSM)/LogicRoot/[CutScene]原始細胞", // Super Mutant Buster (present Ji's Hair later)
+        "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/NPC_AICore_Base/NPC_AICore_Base_FSM/FSM Animator/LogicRoot/NPC_AICore_FSM/General FSM Object/Animator(FSM)/LogicRoot/[CutScene]血清&原始細胞", // Super Mutant Buster (present both items at once)
         // covered by the special case logic for Yanlao/Claw fight
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSCENE_START",
         "A4_S5/A4_S5_Logic(DisableMeForBossDesign)/CUTSENE_EMERGENCY",
