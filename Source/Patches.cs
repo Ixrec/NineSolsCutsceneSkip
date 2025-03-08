@@ -42,6 +42,7 @@ public class Patches {
         "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into BR
         "A11_S2/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into TRI
         "AG_GoHome/Room/Prefab/SimpleCutSceneFSM_搭公車/FSM Animator/LogicRoot/[CutScene]", // normal ending tram
+        "A5_S5/Room/Prefab/[Mech]PodLift FSM 換景Ver (樓上 to 樓下)/[Mech]PodLift FSM/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow", // Shengwu Hall elevator arrival
         // skipping this leaves the camera stuck, not technically a softlock but still unplayable
         "A1_S1_GameLevel/Room/A1_S1_Tutorial_Logic/[CutScene]AfterTutorial_AI_Call/[Timeline]", // the quick tutorial at the start of AF(M)
         // skipping this door opening animation leaves the door closed
