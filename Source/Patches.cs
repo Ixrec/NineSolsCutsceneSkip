@@ -2,6 +2,8 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using Dialogue;
+using System;
 
 namespace CutsceneSkip;
 
@@ -60,6 +62,8 @@ public class Patches {
         "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
         "A2_Stage_Remake/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
         "A7_ButterflyTest/Room/Prefab/FallingTeleportTrickBackgroundProvider/A7_HotSpring/溫泉場景Setting FSM Object/FSM Animator/View/SPA/PinkSkin/Pink_Odd/SimpleCutSceneFSM_八仙無限murmur/FSM Animator/LogicRoot/[CutScene]",
+        // skipping this either softlocks or prevents Goumang from turning on the lights in her boss arena, depending on technical details; either way it's not worth it
+        "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/[CutScene]/[CutScene]LightUp",
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
@@ -128,16 +132,27 @@ public class Patches {
             CutsceneSkip.activeCutscene = (null, "");
     }
 
+    public static List<string> dialogueSkipDenylist = new List<string> {
+        // Because the LightUp cutscene is nested inside this dialogue, it's possible to softlock by skipping "the dialogue"
+        // during the cutscene part. Plus, skipping earlier will prevent the lights from turning on, which is annoying.
+        "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/Start_Dialogue",
+    };
+
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
-    private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance) {
+    private static void DialoguePlayer_StartDialogue(DialoguePlayer __instance, DialogueGraph dialogueGraph, Action callback, bool withBackground) {
         if (CutsceneSkip.KuafuEndingChoiceCutsceneActive()) {
             Log.Info($"Not prompting player to skip this dialogue because it's in the Kuafu ending choice conversation, where even dialogue skipping softlocks.");
             return;
         }
 
-        Log.Debug($"DialoguePlayer_StartDialogue {__instance.name}");
-        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
-        CutsceneSkip.dialogueSkipNotificationId = id;
+        var graphGoPath = GetFullPath(dialogueGraph.gameObject);
+        Log.Debug($"DialoguePlayer_StartDialogue for dialogueGraph {graphGoPath}");
+        if (dialogueSkipDenylist.Contains(graphGoPath)) {
+            Log.Info($"Not prompting player to skip this dialogue because it's in the skip denylist.");
+        } else {
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
+            CutsceneSkip.dialogueSkipNotificationId = id;
+        }
     }
 
     // The credits videos aren't skippable, and the intro video is both vanilla skippable and not even a VideoPlayAction.

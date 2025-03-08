@@ -132,13 +132,19 @@ public class CutsceneSkip : BaseUnityPlugin {
         if (dp != null) {
             var playingDialogueGraph = AccessTools.FieldRefAccess<DialoguePlayer, DialogueGraph>("playingDialogueGraph").Invoke(dp);
             if (playingDialogueGraph != null) {
-                Log.Info($"calling DialoguePlayer.playingDialogueGraph.TrySkip()");
-                dp.TrySkip();
-                if (dialogueSkipNotificationId != "") {
-                    Notifications.CancelNotification(dialogueSkipNotificationId);
-                    dialogueSkipNotificationId = "";
+                var graphGoPath = Patches.GetFullPath(playingDialogueGraph.gameObject);
+                if (Patches.dialogueSkipDenylist.Contains(graphGoPath)) {
+                    Log.Info($"Not allowing player to skip this dialogue because it's in the skip denylist.");
+                    // but there might be a non-dialogue scene they can skip, so...
+                } else {
+                    Log.Info($"calling DialoguePlayer.playingDialogueGraph.TrySkip() for dialogueGraph {graphGoPath}");
+                    dp.TrySkip();
+                    if (dialogueSkipNotificationId != "") {
+                        Notifications.CancelNotification(dialogueSkipNotificationId);
+                        dialogueSkipNotificationId = "";
+                    }
+                    return;
                 }
-                return;
             }
         }
 
