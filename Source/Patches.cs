@@ -147,6 +147,8 @@ public class Patches {
         // Because the LightUp cutscene is nested inside this dialogue, it's possible to softlock by skipping "the dialogue"
         // during the cutscene part. Plus, skipping earlier will prevent the lights from turning on, which is annoying.
         "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/Start_Dialogue",
+        // This dialogue also softlocks if we skip it when it's paused by a mid-dialogue cutscene
+        "A2_S1/Room/Prefab/GuideFish_Acting/NPC_GuideFish A2Variant/General FSM Object/Animator(FSM)/LogicRoot/NPC_Talking_Controller/Config/Conversations/[Conversation] StartDialogueGroup(Note)/標記管理者_Dialogue",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(DialoguePlayer), "StartDialogue")]
