@@ -230,4 +230,30 @@ public class Patches {
         var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip Post-Claw Fight Cutscene");
         CutsceneSkip.activeA4S5 = (__instance, id);
     }
+
+    // Implement prompts for the 2nd 'unwalk' keybind
+
+    [HarmonyPrefix, HarmonyPatch(typeof(Player), "SetStoryWalk")]
+    private static void Player_SetStoryWalk(Player __instance, bool storyWalk, float walkModifier) {
+        if (storyWalk) {
+            Log.Info($"Player_SetStoryWalk called with storyWalk={storyWalk}, walkModifier={walkModifier}");
+            if (CutsceneSkip.storyWalkNotificationId != null) {
+                Notifications.CancelNotification(CutsceneSkip.storyWalkNotificationId);
+            }
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.UnwalkKeybindText()} to Disable 'Story Walk'");
+            CutsceneSkip.storyWalkNotificationId = id;
+        }
+    }
+
+    [HarmonyPrefix, HarmonyPatch(typeof(Player), "SetHasHat")]
+    private static void Player_SetHasHat(Player __instance, bool hastHat) {
+        if (hastHat) {
+            Log.Info($"Player_SetHasHat called with hastHat [sic] = {hastHat}");
+            if (CutsceneSkip.storyWalkNotificationId != null) {
+                Notifications.CancelNotification(CutsceneSkip.storyWalkNotificationId);
+            }
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.UnwalkKeybindText()} to Doff Yi's Hat");
+            CutsceneSkip.storyWalkNotificationId = id;
+        }
+    }
 }

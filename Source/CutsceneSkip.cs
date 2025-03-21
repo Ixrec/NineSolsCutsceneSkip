@@ -12,9 +12,13 @@ namespace CutsceneSkip;
 public class CutsceneSkip : BaseUnityPlugin {
     // https://docs.bepinex.dev/articles/dev_guide/plugin_tutorial/4_configuration.html
     private static ConfigEntry<KeyboardShortcut> skipKeybind = null!;
+    private static ConfigEntry<KeyboardShortcut> unwalkKeybind = null!;
 
     public static string SkipKeybindText() {
         return skipKeybind.Value.Serialize();
+    }
+    public static string UnwalkKeybindText() {
+        return unwalkKeybind.Value.Serialize();
     }
 
     private Harmony harmony = null!;
@@ -28,8 +32,12 @@ public class CutsceneSkip : BaseUnityPlugin {
 
         skipKeybind = Config.Bind("", "Skip Keybind",
             new KeyboardShortcut(KeyCode.K, KeyCode.LeftControl), "The keyboard shortcut to actually skip cutscenes and dialogue.");
-
         KeybindManager.Add(this, SkipActiveCutsceneOrDialogue, () => skipKeybind.Value);
+
+        unwalkKeybind = Config.Bind("", "Undo Story Walk Keybind",
+            new KeyboardShortcut(KeyCode.W, KeyCode.LeftControl), "The keyboard shortcut to undo 'story walk' and/or doff Yi's hat," +
+            " e.g. in vital sancta or the village intro where you're normally forced to walk slowly.");
+        KeybindManager.Add(this, DisableStoryWalkOrHat, () => unwalkKeybind.Value);
 
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
@@ -168,6 +176,28 @@ public class CutsceneSkip : BaseUnityPlugin {
             Notifications.CancelNotification(activeVideo.Item2);
             activeVideo = (null, "");
             return;
+        }
+    }
+
+    public static string? storyWalkNotificationId = null;
+
+    private void DisableStoryWalkOrHat() {
+        var p = Player.i;
+        if (p) {
+            var hasHat = AccessTools.FieldRefAccess<Player, bool>("_hasHat").Invoke(p);
+            if (hasHat) {
+                Log.Info($"calling Player.SetHasHat(false)");
+                Notifications.CancelNotification(storyWalkNotificationId);
+                p.SetHasHat(false); // need to go through the method, not just set the member
+                return;
+            }
+
+            if (p.IsStoryWalk) {
+                Log.Info($"calling Player.SetStoryWalk(false)");
+                Notifications.CancelNotification(storyWalkNotificationId);
+                p.SetStoryWalk(false, 1f);
+                return;
+            }
         }
     }
 

@@ -92,7 +92,7 @@ internal class Notifications {
         return id;
     }
 
-    public static void CancelNotification(string id) {
+    public static void CancelNotification(string? id) {
         Log.Info($"Notifications.CancelNotification({id})");
         if (id != null && id != "") {
             var removedCount = notificationStack.RemoveAll(x => x.id == id);
