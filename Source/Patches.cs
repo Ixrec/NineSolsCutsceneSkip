@@ -111,6 +111,9 @@ public class Patches {
         } else if (__instance.name == "[CutScene]調閱報告") {
             Log.Debug($"not allowing skip for {goPath} because all \"[CutScene]調閱報告\" / Eigong lab report cutscenes risk softlocking when skipped");
             return;
+        } else if (__instance.name == "[Timeline]EatingBySavePoint") {
+            Log.Info($"not allowing skip for {goPath} because skipping a \"[Timeline]EatingBySavePoint\" / root node fusang root cutscene merely deletes the animation without saving any time");
+            return;
         }
 
         string id = "";
