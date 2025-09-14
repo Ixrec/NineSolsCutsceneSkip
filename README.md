@@ -16,7 +16,7 @@ If you find a way to break the game with this mod, please open an issue on this 
 
 Should be the same as any other Nine Sols mod. See https://github.com/nine-sols-modding/NineSols-ExampleMod for detailed instructions.
 
-PRs welcome to skip even more stuff.
+PRs welcome to skip even more stuff, or introduce better ways of skipping things. My goal with this mod was just to skip the things that are easy to skip, then get back to working on my Archipelago Randomizer, so there are many potential improvements if someone feels more passionately about this topic than I did. For example, I have no idea how to skip the ending credits, or the glitch scenes in Ethereal's soulscape, many of the cutscenes on the denylist are probably possible to skip safely if studied in more detail, etc.
 
 ## What about Cheat Menu?
 
