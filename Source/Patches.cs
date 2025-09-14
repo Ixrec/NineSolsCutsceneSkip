@@ -38,8 +38,10 @@ public class Patches {
         "A4_S5/Room/TaoChangSniper_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Yanlao fight teaser on entering BR gauntlet
         // skipping this leaves Yi stuck somewhere he can't get out of
         "GameLevel/Room1/SimpleCutSceneFSM_EnterVilliage/FSM Animator/LogicRoot/[CutScene]", // first time walking into PBV during intro
-        "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into BR
-        "A11_S2/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular into TRI
+        "A4_S3/Room/Prefab/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular from IW to BR
+        "A4_S2/Room/Prefab/ElevatorGroup/CutScene_ChangeScene_FSM Variant 斜坡電梯/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular from BR to IW
+        "A11_S2/CutScene_ChangeScene_FSM Variant/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular from TRC to TRI
+        "A11_S1/Room/CutScene_ChangeScene_FSM Variant 斜坡電梯/FSM Animator/LogicRoot/[CutScene]EnterScene", // funicular from TRI to TRC
         "AG_GoHome/Room/Prefab/SimpleCutSceneFSM_搭公車/FSM Animator/LogicRoot/[CutScene]", // normal ending tram
         "A5_S5/Room/Prefab/[Mech]PodLift FSM 換景Ver (樓上 to 樓下)/[Mech]PodLift FSM/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow", // Shengwu Hall elevator arrival
         // skipping this leaves the camera stuck, not technically a softlock but still unplayable
