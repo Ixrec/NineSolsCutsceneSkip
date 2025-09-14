@@ -77,7 +77,7 @@ public class Patches {
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
     // so we introduce an artificial delay to prevent users from hitting the problem
-    private static List<string> skipDelaylist = new List<string> {
+    private static List<string> skip100FDelaylist = new List<string> {
         // softlocks if skipped instantly
         "GameLevel/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]Altar/[Timeline]Altar", // PBV intro ceremony/harvesting scene
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
@@ -87,18 +87,22 @@ public class Patches {
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到VR/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the VR Device
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
         "VR_TaoChang/Room/SimpleCutSceneFSM_易公後妹妹回憶/FSM Animator/LogicRoot/[CutScene]", // Heng flashback after being trapped in Eigong's soulscape
-        // Eigong fight loses many of its sound effects (including parry!) if these are skipped super early
-        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 一進", // full version for first attempt
-        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
         // According to MattStrats, the Lady E fight can also lose many of its sound effects if these are skipped early, though I could not reproduce myself
         "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]FirstTimeContact/[Timeline]", // full version for first attempt
         "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]SecondTimeContact/[Timeline]", // quick refight version
     };
 
+    private static List<string> skip200FDelaylist = new List<string> {
+        // Eigong fight loses many of its sound effects (including parry!) if these are skipped early
+        // I can reproduce the refight scene losing sound effects even with a 100 frame delay. Any value longer than 100 I cannot repro with, so 200 should be adequate.
+        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 一進", // full version for first attempt
+        "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
+    };
+
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
     private static void SimpleCutsceneManager_PlayAnimation(SimpleCutsceneManager __instance) {
         var goPath = GetFullPath(__instance.gameObject);
-        if (skipDelaylist.Contains(goPath)) {
+        if (skip100FDelaylist.Contains(goPath) || skip200FDelaylist.Contains(goPath)) {
             return;
         }
 
@@ -134,9 +138,17 @@ public class Patches {
     [HarmonyPostfix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
     private static async void SimpleCutsceneManager_PlayAnimation_Postfix(SimpleCutsceneManager __instance) {
         var goPath = GetFullPath(__instance.gameObject);
-        if (skipDelaylist.Contains(goPath)) {
-            await UniTask.DelayFrame(100); // completely arbitrary number, have not tested how framerate settings affect this
-            Log.Info($"SimpleCutsceneManager_PlayAnimation acting on {goPath} with delay (i.e. Postfix patch + 100 frame wait) to avoid softlocking");
+        int? delay = null;
+        // completely arbitrary numbers, have not tested how framerate settings affect this
+        if (skip100FDelaylist.Contains(goPath)) {
+            delay = 100;
+        }
+        if (skip200FDelaylist.Contains(goPath)) {
+            delay = 200;
+        }
+        if (delay != null) {
+            await UniTask.DelayFrame((int)delay);
+            Log.Info($"SimpleCutsceneManager_PlayAnimation acting on {goPath} with delay (i.e. Postfix patch + {delay} frame wait) to avoid softlocking");
             var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Cutscene");
             CutsceneSkip.activeCutscene = (__instance, id);
         }
