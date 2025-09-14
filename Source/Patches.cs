@@ -73,6 +73,9 @@ public class Patches {
         "A4_S1/Room/Prefab/Gameplay_3/左下開電/PowerOnFSM/FSM Animator/LogicRoot/[CutScene FSM]PowerOn/FSM Animator/LogicRoot/[CutScene]",
         // Shuanshuan dinner scene; I previously thought delay was enough but apparently this has to be deny
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
+        // Power Reservoir control room hack 1st scene. This 1st scene is fine in isolation, but the 2nd scene (showing the Radiant Pagoda) is on a fixed timer, and if you skip
+        // the 1st scene it becomes possible to leave the room as the 2nd scene starts playing, which *is* a softlock. The simplest fix is not letting you skip the 1st scene.
+        "A2_SG1/Room/Unlock FSM/FSM Animator/LogicRoot/[TimeLine]ControlRoomPowerUp"
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
