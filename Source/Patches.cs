@@ -69,6 +69,8 @@ public class Patches {
         "A3_S5_BossGouMang_GameLevel/Room/Simple Binding Tool/BossGouMangLogic/[CutScene]/[CutScene]LightUp",
         // Outer Warehouse hack in the lower left corner; skipping this prevents the crates and crushers from moving as intended
         "A4_S1/Room/Prefab/Gameplay_3/左下開電/PowerOnFSM/FSM Animator/LogicRoot/[CutScene FSM]PowerOn/FSM Animator/LogicRoot/[CutScene]",
+        // Shuanshuan dinner scene; I previously thought delay was enough but apparently this has to be deny
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
@@ -78,7 +80,6 @@ public class Patches {
         "GameLevel/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]Altar/[Timeline]Altar", // PBV intro ceremony/harvesting scene
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到棋盤/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the Qiankun Board
-        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]", // listening to the vinyl record w/ Shuanshuan
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到名畫作/FSM Animator/LogicRoot/[CutScene]", // admiring the portrait w/ Shuanshuan
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到VR/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the VR Device
