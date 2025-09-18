@@ -70,7 +70,12 @@ public class CutsceneSkip : BaseUnityPlugin {
 
         if (activeA2SG4.Item1 != null) {
             var hengPRFlashback = activeA2SG4.Item1;
+            if (activeA2SG4.Item2 == "") {
+                Log.Info($"Ignoring request to skip A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, because the dialogue hasn't started yet, so it's still too early to skip safely.");
+                return;
+            }
 
+            // I am unsure if any of these special cases still matter now that we don't allow skipping this flashback until dialogue starts.
             if (dp != null && dp.phoneUI.phoneRingAnimator.GetCurrentAnimatorStateInfo(0).IsName("Webcam_Show")) {
                 Log.Info($"Found A2_SG4_Logic a.k.a. Heng Power Reservoir flashback, but doing nothing because the phone UI is currently ringing. If we skip now that ringing will go on forever.");
                 return;

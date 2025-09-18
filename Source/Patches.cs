@@ -183,6 +183,10 @@ public class Patches {
         Log.Debug($"DialoguePlayer_StartDialogue for dialogueGraph {graphGoPath}");
         if (dialogueSkipDenylist.Contains(graphGoPath)) {
             Log.Info($"Not prompting player to skip this dialogue because it's in the skip denylist.");
+        } else if (graphGoPath == "A2_SG4/Logic/PhoneActingLoigic(Part1)/妹妹來電1_Dialogue") {
+            // Heng flashback special case: Wait until the first dialogue starts before allowing skips and prompting the user
+            var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
+            CutsceneSkip.activeA2SG4.Item2 = id;
         } else {
             var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Dialogue");
             CutsceneSkip.dialogueSkipNotificationId = id;
@@ -218,8 +222,8 @@ public class Patches {
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "EnterLevelStart")]
     private static void A2_SG4_Logic_EnterLevelStart(A2_SG4_Logic __instance) {
         Log.Info($"A2_SG4_Logic_EnterLevelStart / Heng Power Reservoir flashback");
-        var id = Notifications.AddNotification($"Press {CutsceneSkip.SkipKeybindText()} to Skip This Heng Flashback");
-        CutsceneSkip.activeA2SG4 = (__instance, id);
+        // Don't post a notification at first. We don't want to allow skipping it until the first dialogue starts, since earlier skips are very glitchy.
+        CutsceneSkip.activeA2SG4 = (__instance, "");
     }
     [HarmonyPrefix, HarmonyPatch(typeof(A2_SG4_Logic), "OnLevelDestroy")]
     private static void A2_SG4_Logic_OnLevelDestroy(A2_SG4_Logic __instance) {
