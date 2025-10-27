@@ -75,7 +75,9 @@ public class Patches {
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/[CutScene] 食譜_團圓飯/FSM Animator/LogicRoot/[CutScene]",
         // Power Reservoir control room hack 1st scene. This 1st scene is fine in isolation, but the 2nd scene (showing the Radiant Pagoda) is on a fixed timer, and if you skip
         // the 1st scene it becomes possible to leave the room as the 2nd scene starts playing, which *is* a softlock. The simplest fix is not letting you skip the 1st scene.
-        "A2_SG1/Room/Unlock FSM/FSM Animator/LogicRoot/[TimeLine]ControlRoomPowerUp"
+        "A2_SG1/Room/Unlock FSM/FSM Animator/LogicRoot/[TimeLine]ControlRoomPowerUp",
+        // skipping this makes Yi fall out of the little FSP elevators, which is mostly harmless but weird
+        "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/[Mech]PodLift FSM Local傳送Ver/[Mech]PodLift FSM_樓上/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow",
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
@@ -100,6 +102,8 @@ public class Patches {
         // I can reproduce the refight scene losing sound effects even with a 100 frame delay. Any value longer than 100 I cannot repro with, so 200 should be adequate.
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 一進", // full version for first attempt
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
+        // giving Shennong the first poison in FSP
+        "AG_S2/Room/NPCs/議會演出相關Binding/NPC_ShinNon_Base/NPC_ShinNon_Base_FSM/FSM Animator/LogicRoot/NPC_ShenNong_Poison Variant/General FSM Object/Animator(FSM)/LogicRoot/[CutScene]神農解毒演出",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
