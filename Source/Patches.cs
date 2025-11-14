@@ -87,7 +87,6 @@ public class Patches {
         "GameLevel/SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]Altar/[Timeline]Altar", // PBV intro ceremony/harvesting scene
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到種子/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan planting the Unknown Seed
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到棋盤/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the Qiankun Board
-        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]", // listening to the vinyl record w/ Shuanshuan
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到名畫作/FSM Animator/LogicRoot/[CutScene]", // admiring the portrait w/ Shuanshuan
         "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到VR/FSM Animator/LogicRoot/[CutScene]", // Shuanshuan playing with the VR Device
         "A2_SG4/Room/妹妹回憶_SimpleCutSceneFSM/FSM Animator/LogicRoot/[CutScene]", // Heng Warehouse flashback
@@ -104,6 +103,10 @@ public class Patches {
         "GameLevel/Room/Prefab/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene] 二進", // quick refight version
         // giving Shennong the first poison in FSP
         "AG_S2/Room/NPCs/議會演出相關Binding/NPC_ShinNon_Base/NPC_ShinNon_Base_FSM/FSM Animator/LogicRoot/NPC_ShenNong_Poison Variant/General FSM Object/Animator(FSM)/LogicRoot/[CutScene]神農解毒演出",
+        // listening to the vinyl record w/ Shuanshuan
+        // This was in the 100F list from 0.1.10 to 1.0.1, and I cannot reproduce any issues at 100F of delay,
+        // but multiple players reported this one scene softlocking so we're gonna try increasing the delay in 1.0.2.
+        "AG_S2/Room/NPCs/議會演出相關Binding/ShanShan 軒軒分身 FSM/FSM Animator/CutScene/收到文物演出/[CutsceneFSM] 軒軒收到古唱片/FSM Animator/LogicRoot/[CutScene]",
     };
 
     [HarmonyPrefix, HarmonyPatch(typeof(SimpleCutsceneManager), "PlayAnimation")]
