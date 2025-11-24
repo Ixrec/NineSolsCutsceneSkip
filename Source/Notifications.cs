@@ -23,6 +23,7 @@ internal class Notifications {
     public static void Awake() {
         var fullscreenCanvasObject = new GameObject("NineSolsAPI-FullscreenCanvas");
         RCGLifeCycle.DontDestroyForever(fullscreenCanvasObject);
+        fullscreenCanvasObject.hideFlags = HideFlags.HideAndDontSave; // required since Nov 4th patch, or else this object gets unloaded
 
         CanvasComponent = fullscreenCanvasObject.AddComponent<Canvas>();
         CanvasComponent.renderMode = RenderMode.ScreenSpaceOverlay;
