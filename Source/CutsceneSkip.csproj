@@ -3,7 +3,7 @@
         <AssemblyName>CutsceneSkip</AssemblyName>
         <Description>A Nine Sols mod that enables skipping any cutscene or dialogue (that won't break the game).</Description>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <PublishRelease>true</PublishRelease>
