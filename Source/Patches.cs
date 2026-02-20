@@ -77,7 +77,11 @@ public class Patches {
         // the 1st scene it becomes possible to leave the room as the 2nd scene starts playing, which *is* a softlock. The simplest fix is not letting you skip the 1st scene.
         "A2_SG1/Room/Unlock FSM/FSM Animator/LogicRoot/[TimeLine]ControlRoomPowerUp",
         // skipping this makes Yi fall out of the little FSP elevators, which is mostly harmless but weird
+        "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/[Mech]PodLift FSM Local傳送Ver (1)/[Mech]PodLift FSM_樓上/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow",
         "AG_S2/Room/Prefab/ControlRoom FSM Binding Tool/[Mech]PodLift FSM Local傳送Ver/[Mech]PodLift FSM_樓上/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow",
+        // same for the little TRC elevators
+        "A11_S1/Room/[Mech]PodLift FSM Local傳送Ver/[Mech]PodLift FSM_樓上/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow",
+        "A11_S1/Room/[Mech]PodLift FSM Local傳送Ver (1)/[Mech]PodLift FSM_樓上/FSM Animator/LogicRoot/[CutScene] ReceiveTeleport_FromBelow",
     };
 
     // These cutscenes are only problematic if you skip them *very* early, and we really want them to be skippable,
