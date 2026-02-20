@@ -94,6 +94,8 @@ public class Patches {
         // According to MattStrats, the Lady E fight can also lose many of its sound effects if these are skipped early, though I could not reproduce myself
         "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]FirstTimeContact/[Timeline]", // full version for first attempt
         "P2_R22_Savepoint_GameLevel/EventBinder/General Boss Fight FSM Object Variant/FSM Animator/[CutScene]SecondTimeContact/[Timeline]", // quick refight version
+        // Fuxi VS exit scene also loses sound effects if skipped early
+        "A9_S2/Room/伏羲嚇人 FSMGeneral FSM Object --開/FSM Animator/LogicRoot/Sleeppod  FSM (1)/[CutScene]BackFromSleeppod/FSM Animator/LogicRoot/[CutScene]",
     };
 
     private static List<string> skip200FDelaylist = new List<string> {
